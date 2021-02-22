@@ -160,7 +160,7 @@ export const API_FILES = {
         'MessageBoxDefaultComponent',
         'MessageBoxSemanticIconComponent',
         'MessageBoxContainerComponent',
-        'MessageBoxFooterButtonComponent',
+        'MessageBoxFooterButtonComponent'
     ],
     notification: [
         'NotificationComponent',
@@ -262,7 +262,7 @@ export const API_FILES = {
         'TabProcessIconDirective',
         'TabItemExpandComponent',
         'TabSeparator',
-        'TabInfo',
+        'TabInfo'
     ],
     text: ['TextComponent'],
     tile: [
@@ -327,5 +327,6 @@ export const API_FILES = {
         'GridListItemFooterBarComponent',
         'GridListItemToolbarComponent',
         'GridListGroupHeaderComponent'
-    ]
+    ],
+    statusIndicator: ['StatusIndicatorComponent']
 };
