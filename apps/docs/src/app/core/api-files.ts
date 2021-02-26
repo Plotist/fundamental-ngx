@@ -60,6 +60,7 @@ export const API_FILES = {
     carousel: ['CarouselComponent', 'CarouselItemComponent', 'CarouselService'],
     combobox: ['ComboboxComponent'],
     checkbox: ['CheckboxComponent'],
+    contentDensity: [],
     datePicker: ['DatePickerComponent'],
     datetimePicker: ['DatetimePickerComponent'],
     feedInput: [
