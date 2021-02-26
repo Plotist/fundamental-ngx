@@ -76,7 +76,7 @@ export const API_FILES = {
         'FileUploaderDragndropDirective',
         'FileUploaderService'
     ],
-    fixedCardLayout: ['FixedCardLayoutComponent', 'CardDefinitionDirective'],
+    fixedCardLayout: ['FixedCardLayoutComponent', 'CardDefinitionDirective', 'FixedCardLayoutItemComponent'],
     flexibleColumnLayout: ['FlexibleColumnLayoutComponent'],
     form: [
         'FormControlComponent',
@@ -93,6 +93,7 @@ export const API_FILES = {
     formMessage: ['FormInputMessageGroupComponent'],
     globalConfig: [],
     icon: ['IconComponent'],
+    illustratedMessage: ['IllustratedMessageComponent'],
     infoLabel: ['InfoLabelComponent'],
     infiniteScroll: ['InfiniteScrollDirective'],
     inlineHelp: ['InlineHelpComponent'],
