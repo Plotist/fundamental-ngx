@@ -3,26 +3,26 @@ import {
     ContentDensity,
     ContentDensityService
 } from '@fundamental-ngx/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
     selector: 'fd-content-density-example',
-    templateUrl: './content-density-example.component.html',
-    providers: [ContentDensityService]
+    templateUrl: './content-density-example.component.html'
 })
 export class ContentDensityExampleComponent implements OnInit {
     selectedDensity: ContentDensity;
 
-    compact$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    compact$: Observable<boolean>;
 
     constructor(private _contentDensityService: ContentDensityService) {}
 
     ngOnInit(): void {
-        this.selectedDensity = 'cozy';
+        this.selectedDensity = this._contentDensityService.contentDensity.value;
 
-        this._contentDensityService.contentDensity.subscribe(val => {
-            this.compact$.next(val === 'compact');
-        });
+        this.compact$ = this._contentDensityService.contentDensity.pipe(
+            map(density => density === 'compact')
+        );
     }
 
     onChange(): void {

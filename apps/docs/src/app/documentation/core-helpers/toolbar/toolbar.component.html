@@ -25,6 +25,34 @@
 
     <fd-shellbar-actions [closePopoverOnSelect]>
         <button fd-button
+                class="fd-shellbar__button--menu fd-docs--theme-menu"
+                fdType="transparent"
+                [fdMenu]="true"
+                [fdMenuTrigger]="densityMenu">
+            Content Density
+        </button>
+
+        <fd-menu #densityMenu
+                 [fillControlMode]="null"
+                 placement="bottom-end">
+            <li fd-menu-item>
+                <div fd-menu-interactive (click)="selectDensity('cozy')">
+                    <span fd-menu-title>Cozy</span>
+                </div>
+            </li>
+            <li fd-menu-item>
+                <div fd-menu-interactive (click)="selectDensity('condensed')">
+                    <span fd-menu-title>Condensed</span>
+                </div>
+            </li>
+            <li fd-menu-item>
+                <div fd-menu-interactive (click)="selectDensity('compact')">
+                    <span fd-menu-title>Compact</span>
+                </div>
+            </li>
+        </fd-menu>
+
+        <button fd-button
                 glyph="palette"
                 class="fd-shellbar__button--menu fd-docs--theme-menu"
                 fdType="transparent"
