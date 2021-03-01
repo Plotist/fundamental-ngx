@@ -11,10 +11,12 @@ import { ButtonModule } from '../../button/public_api';
 
 import { UserActionsMenuComponent } from './user-actions-menu/user-actions-menu.component';
 import { UserActionsMenuItemComponent } from './user-actions-menu-item/user-actions-menu-item.component';
+import { UserActionsMenuFooterComponent } from './user-actions-menu-footer/user-actions-menu-footer.component';
+import { UserActionsMenuHeaderComponent } from './user-actions-menu-header/user-actions-menu-header.component';
 
 @NgModule({
-  declarations: [UserActionsMenuComponent, UserActionsMenuItemComponent],
-  exports: [UserActionsMenuComponent, UserActionsMenuItemComponent],
+  declarations: [UserActionsMenuComponent, UserActionsMenuItemComponent, UserActionsMenuFooterComponent, UserActionsMenuHeaderComponent],
+  exports: [UserActionsMenuComponent, UserActionsMenuItemComponent, UserActionsMenuFooterComponent, UserActionsMenuHeaderComponent],
   imports: [
     CommonModule,
     PopoverModule,

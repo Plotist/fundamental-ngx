@@ -1,15 +1,23 @@
 <li fd-list-item>
-    <a fd-list-link>
-        <ng-container *ngIf="glyphSrc">
-            <span class="fd-user-actions-menu-item__custom-icon" fd-list-icon glyph="border">
-                <img [src]="glyphSrc" [alt]="title" />
-            </span>
-        </ng-container>
-        <ng-container *ngIf="!glyphSrc && glyph">
-            <span fd-list-icon [glyph]="glyph"></span>
-        </ng-container>
-        <span fd-list-title [title]="title">
-            {{ title }}
+    <a fd-list-link [navigationIndicator]="navigation">
+        <ng-container [ngTemplateOutlet]="icon"></ng-container>
+
+        <span fd-list-title [title]="title" [innerText]="title"></span>
+
+        <span *ngIf="counter" fd-list-secondary>
+            <span class="fd-badge" [innerText]="counter"></span>
         </span>
     </a>
 </li>
+
+<ng-template #icon>
+    <ng-container *ngIf="glyphSrc">
+        <span class="fd-user-actions-menu-item__custom-icon" fd-list-icon glyph="border">
+            <img [src]="glyphSrc" [alt]="title" />
+        </span>
+    </ng-container>
+
+    <ng-container *ngIf="!glyphSrc && glyph">
+        <span fd-list-icon [glyph]="glyph"></span>
+    </ng-container>
+</ng-template>

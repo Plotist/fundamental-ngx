@@ -1,7 +1,6 @@
+@import '~fundamental-styles/dist/badge';
+
 .fd-user-actions-menu-item {
-    .fd-list__title {
-        margin-left: 0.5rem;
-    }
     &__custom-icon.fd-list__icon[class*=sap-icon] {
         position: relative;
 
@@ -17,6 +16,26 @@
         &::before {
             content: '.';
             opacity: 0;
+        }
+    }
+
+    .fd-list__secondary {
+        overflow: visible;
+        display: flex;
+        justify-content: flex-end;
+
+        .fd-badge {
+            position: static;
+            margin-right: 0;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            background-color: #286eb4;
+            background-color: var(--sapAccentColor6, #286eb4);
         }
     }
 }

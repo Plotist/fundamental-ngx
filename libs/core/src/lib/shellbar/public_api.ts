@@ -12,3 +12,5 @@ export * from './shellbar-title/shellbar-title.component';
 export * from './shellbar-actions/shellbar-actions-mobile.component';
 export * from './user-actions-menu/user-actions-menu/user-actions-menu.component';
 export * from './user-actions-menu/user-actions-menu-item/user-actions-menu-item.component';
+export * from './user-actions-menu/user-actions-menu-header/user-actions-menu-header.component';
+export * from './user-actions-menu/user-actions-menu-footer/user-actions-menu-footer.component';

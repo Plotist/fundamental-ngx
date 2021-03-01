@@ -50,7 +50,8 @@ export class ShellbarCollapsibleExampleComponent {
     user: ShellbarUser = {
         fullName: 'John Doe',
         image: 'https://i.pravatar.cc/150?img=2',
-        colorAccent: 1
+        colorAccent: 1,
+        role: 'QA'
     };
 
     userMenu = [

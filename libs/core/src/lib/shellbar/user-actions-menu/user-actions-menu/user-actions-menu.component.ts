@@ -1,58 +1,82 @@
-import { ChangeDetectionStrategy, Component, ContentChildren, Input, QueryList, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    ContentChild,
+    ContentChildren,
+    Input,
+    QueryList,
+    ViewChild,
+    ViewEncapsulation
+} from '@angular/core';
 
 import { PopoverComponent, Placement } from '../../../../lib/popover/public_api';
 import { BasePopoverClass } from '../../../popover/base/base-popover.class';
 import { ShellbarUser } from '../../model/shellbar-user';
+import { UserActionsMenuFooterComponent } from '../user-actions-menu-footer/user-actions-menu-footer.component';
+import { UserActionsMenuHeaderComponent } from '../user-actions-menu-header/user-actions-menu-header.component';
 import { UserActionsMenuItemComponent } from '../user-actions-menu-item/user-actions-menu-item.component';
 
 @Component({
-  selector: 'fd-user-actions-menu',
-  templateUrl: './user-actions-menu.component.html',
-  styleUrls: ['./user-actions-menu.component.scss'],
-  encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'fd-user-actions-menu',
+    templateUrl: './user-actions-menu.component.html',
+    styleUrls: ['./user-actions-menu.component.scss'],
+    encapsulation: ViewEncapsulation.None,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserActionsMenuComponent extends BasePopoverClass {
-  /** The user data. */
-  @Input()
-  user: ShellbarUser;
+    /** The user data. */
+    @Input()
+    user: ShellbarUser;
 
-  /** Show fullName from user data, if it exists */
-  @Input()
-  showName = true;
+    /** Show fullName from user data, if it exists */
+    @Input()
+    showName = true;
 
-  /** Maximum width of menu in px */
-  @Input()
-  maxWidth = 200;
+    /** Maximum width of menu in px */
+    @Input()
+    maxWidth = 200;
 
-  /** The placement of the popover. It can be one of: top, top-start, top-end, bottom,
-   *  bottom-start, bottom-end, right, right-start, right-end, left, left-start, left-end. */
-  @Input()
-  placement: Placement = 'bottom-end';
+    /** The placement of the popover. It can be one of: top, top-start, top-end, bottom,
+     *  bottom-start, bottom-end, right, right-start, right-end, left, left-start, left-end. */
+    @Input()
+    placement: Placement = 'bottom-end';
 
-  /** Display menu in compact mode */
-  @Input()
-  compact = false;
+    /** Display menu in compact mode */
+    @Input()
+    compact = false;
 
-  /** @hidden */
-  @ViewChild(PopoverComponent) menu: PopoverComponent;
+    /** @hidden */
+    @ViewChild(PopoverComponent)
+    _menu: PopoverComponent;
 
-  /** @hidden */
-  @ContentChildren(UserActionsMenuItemComponent) items: QueryList<UserActionsMenuItemComponent>;
+    /** @hidden */
+    @ContentChild(UserActionsMenuHeaderComponent)
+    _menuHeader: UserActionsMenuHeaderComponent;
 
-  get menuClass(): string {
-    return 'fd-user-actions-menu';
-  }
+    /** @hidden */
+    @ContentChild(UserActionsMenuFooterComponent)
+    _menuFooter: UserActionsMenuFooterComponent;
 
-  get canOpen(): boolean {
-    return !this.disabled && (this.showName && Boolean(this.user?.fullName) || this.items.length > 0);
-  }
+    /** @hidden */
+    @ContentChildren(UserActionsMenuItemComponent)
+    _items: QueryList<UserActionsMenuItemComponent>;
 
-  get bodyClass(): string[] {
-    if (this.compact) {
-      return [this.menuClass + '__body', this.menuClass + '__compact'];
+    /** @hidden */
+    get _menuClass(): string {
+        return 'fd-user-actions-menu';
     }
-    return [this.menuClass + '__body'];
-  }
 
+    /** @hidden */
+    get _canOpen(): boolean {
+        return !this.disabled && ((this.showName && Boolean(this.user?.fullName)) || this._items.length > 0);
+    }
+
+    /** @hidden */
+    get _bodyClass(): string[] {
+        if (this.compact) {
+            return [this._menuClass, `${this._menuClass}__compact`];
+        }
+
+        return [this._menuClass];
+    }
 }

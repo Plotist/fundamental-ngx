@@ -1,15 +1,30 @@
 .fd-user-actions-menu {
-    &__body {
-        min-width: 10rem;
-        max-width: 20rem;
+    width: 18rem !important;
 
-        .fd-user-actions-menu__user-name {
-            width: 100%;
-            padding: 1rem 0 0.5rem;
+    &__header {
+        &-wrapper {
+            height: auto !important;
         }
 
-        .fd-list {
-            outline: none;
+        &-content {
+            flex-direction: column;
         }
+    }
+
+    &__user-avatar {
+        margin-bottom: 0.5rem;
+    }
+
+    &__user-name {
+        font-size: 1rem;
+        font-size: var(--sapFontLargeSize, 1rem);
+        color: #32363a;
+        color: var(--sapTextColor, #32363a);
+    }
+
+    &__user-role {
+        font-size: 0.75rem;
+        font-size: var(--sapFontSmallSize, 0.75rem);
+        margin: 0;
     }
 }

@@ -1,14 +1,14 @@
 import {
-  ChangeDetectionStrategy,
-  Component,
-  HostListener,
-  Input,
-  Output,
-  ViewEncapsulation,
-  EventEmitter,
-  Host,
-  OnDestroy,
-  Optional
+    ChangeDetectionStrategy,
+    Component,
+    HostListener,
+    Input,
+    Output,
+    ViewEncapsulation,
+    EventEmitter,
+    Host,
+    OnDestroy,
+    Optional
 } from '@angular/core';
 import { finalize } from 'rxjs/operators';
 
@@ -16,72 +16,82 @@ import { DialogContentType, DialogRef, DialogService } from '../../../dialog/pub
 import { UserActionsMenuComponent } from '../user-actions-menu/user-actions-menu.component';
 
 @Component({
-  selector: 'fd-user-actions-menu-item',
-  templateUrl: './user-actions-menu-item.component.html',
-  styleUrls: ['./user-actions-menu-item.component.scss'],
-  host: {
-    class: 'fd-user-actions-menu-item'
-  },
-  encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'fd-user-actions-menu-item',
+    templateUrl: './user-actions-menu-item.component.html',
+    styleUrls: ['./user-actions-menu-item.component.scss'],
+    host: {
+        class: 'fd-user-actions-menu-item'
+    },
+    encapsulation: ViewEncapsulation.None,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserActionsMenuItemComponent implements OnDestroy {
-  /** View title for action item. Required property */
-  @Input()
-  title: string;
+    /** View title for action item. Required property */
+    @Input()
+    title: string;
 
-  /** Sets icon for user action menu, glyph code from icons */
-  @Input()
-  glyph: string;
+    /** Sets icon for user action menu, glyph code from icons */
+    @Input()
+    glyph: string;
 
-  /** Sets icon src if you want use image. You will have predefined place with dimensions same as glyph `border` */
-  @Input()
-  glyphSrc: string;
+    @Input()
+    counter: number;
 
-  /** Opens a dialog component with with provided content. */
-  @Input()
-  dialogContent: DialogContentType;
+    @Input()
+    navigation = false;
 
-  @Output() onOpenDialog = new EventEmitter<DialogRef>();
+    /** Sets icon src if you want use image. You will have predefined place with dimensions same as glyph `border` */
+    @Input()
+    glyphSrc: string;
 
-  /** @hidden Active dialog */
-  private _activeDialog: DialogRef;
+    /** Opens a dialog component with with provided content. */
+    @Input()
+    dialogContent: DialogContentType;
 
-  /** @hidden */
-  @HostListener('click')
-  handleClick(): void {
-    this.parent.menu?.close();
-    if (this.dialogContent) {
-      this.callDialogTemplateRef();
-      return;
+    @Output()
+    onOpenDialog = new EventEmitter<DialogRef>();
+
+    /** @hidden Active dialog */
+    private _activeDialog: DialogRef;
+
+    /** @hidden */
+    @HostListener('click')
+    handleClick(): void {
+        this.parent._menu?.close();
+
+        if (this.dialogContent) {
+            this._callDialogTemplateRef();
+        }
     }
-  }
 
-  constructor(
-    private readonly _dialogService: DialogService,
-    @Optional() @Host() private parent: UserActionsMenuComponent
-  ) { }
+    /** @hidden */
+    constructor(
+        private readonly _dialogService: DialogService,
+        @Optional() @Host() public parent: UserActionsMenuComponent
+    ) {}
 
-  ngOnDestroy(): void {
-    this._dismissDialog();
-  }
-
-  /** @hidden */
-  private callDialogTemplateRef(): void {
-    if (this._activeDialog) {
-      return;
+    /** @hidden */
+    ngOnDestroy(): void {
+        this._dismissDialog();
     }
-    this._activeDialog = this._dialogService.open(this.dialogContent, { responsivePadding: true });
-    this.onOpenDialog.emit(this._activeDialog);
-    this._activeDialog.afterClosed.pipe(
-      finalize(() => this._activeDialog = null)
-    ).subscribe();
-  }
-  
-  /** @hidden */
-  private _dismissDialog(): void {
-    if (this._activeDialog) {
-      this._activeDialog.dismiss();
+
+    /** @hidden */
+    private _callDialogTemplateRef(): void {
+        if (this._activeDialog) {
+            return;
+        }
+
+        this._activeDialog = this._dialogService.open(this.dialogContent, { responsivePadding: true });
+
+        this.onOpenDialog.emit(this._activeDialog);
+
+        this._activeDialog.afterClosed.pipe(finalize(() => (this._activeDialog = null))).subscribe();
     }
-  }
+
+    /** @hidden */
+    private _dismissDialog(): void {
+        if (this._activeDialog) {
+            this._activeDialog.dismiss();
+        }
+    }
 }

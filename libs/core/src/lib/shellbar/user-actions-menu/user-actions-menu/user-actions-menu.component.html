@@ -1,50 +1,78 @@
 <div class="fd-shellbar__action fd-shellbar__action--show-always" *ngIf="user">
-    <div class="fd-user-menu">
-        <button fd-button class="fd-shellbar__button fd-shellbar__button--user-menu"
-            [disabled]="!canOpen"
-            [fdPopoverTrigger]="menu">
-            <ng-container *ngIf="user.image; else userLabel" [ngTemplateOutlet]="userImage"></ng-container>
-        </button>
-         <fd-popover
-            #menu
-            [triggers]="triggers"
-            [placement]="placement"
-            [fillControlMode]="fillControlMode"
-            [closeOnEscapeKey]="closeOnEscapeKey"
-            [noArrow]="false"
-            [additionalBodyClass]="bodyClass"
-            [closeOnOutsideClick]="closeOnOutsideClick">
-            <ul fd-list [noBorder]="true" [compact]="compact" class="fd-list--navigation">
-                <li fd-list-item *ngIf="showName && user?.fullName">
-                    <h4
-                        class="fd-user-actions-menu__user-name fd-centered-content"
-                        fd-title
-                        [headerSize]="compact ? '6' : '4'"
-                        [wrap]="true"
-                    >{{ user.fullName }}</h4>
-                </li>
-                <ng-content select="fd-user-actions-menu-item"></ng-content>
-            </ul>
-        </fd-popover>
-    </div>
+    <button
+        fd-button
+        class="fd-shellbar__button fd-shellbar__button--user-menu"
+        [disabled]="!_canOpen"
+        [fdPopoverTrigger]="menu"
+    >
+        <ng-container *ngIf="user.image; else userLabel" [ngTemplateOutlet]="userImage"></ng-container>
+    </button>
+
+    <fd-popover
+        #menu
+        [disabled]="!_canOpen"
+        [triggers]="triggers"
+        [placement]="placement"
+        [fillControlMode]="fillControlMode"
+        [closeOnEscapeKey]="closeOnEscapeKey"
+        [noArrow]="false"
+        [additionalBodyClass]="_bodyClass"
+        [closeOnOutsideClick]="closeOnOutsideClick"
+    >
+        <ng-container *ngIf="_menuHeader && showName && user?.fullName" [ngTemplateOutlet]="header"></ng-container>
+        <ng-container [ngTemplateOutlet]="body"></ng-container>
+        <ng-container *ngIf="_menuFooter" [ngTemplateOutlet]="footer"></ng-container>
+    </fd-popover>
 </div>
 
+<ng-template #header>
+    <div fd-popover-body-header class="fd-user-actions-menu__header">
+        <div fd-bar [cozy]="!compact" class="fd-user-actions-menu__header-wrapper">
+            <div fd-bar-middle class="fd-user-actions-menu__header-content">
+                <fd-avatar
+                    class="fd-user-actions-menu__user-avatar"
+                    size="xl"
+                    [colorAccent]="user.colorAccent"
+                    [circle]="true"
+                    [backgroundImage]="user.image"
+                    style="margin-bottom: 0.5rem"
+                >
+                </fd-avatar>
+
+                <h4
+                    class="fd-user-actions-menu__user-name"
+                    fd-title
+                    [headerSize]="compact ? '6' : '4'"
+                    [wrap]="true"
+                    [innerText]="user.fullName"
+                ></h4>
+
+                <p *ngIf="user.role" class="fd-user-actions-menu__user-role" [innerText]="user.role"></p>
+            </div>
+
+            <ng-content select="fd-user-actions-menu-header"></ng-content>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #body>
+    <ul fd-list navigationIndicator="true" [noBorder]="true" [compact]="compact" class="fd-list--navigation">
+        <ng-content select="fd-user-actions-menu-item"></ng-content>
+    </ul>
+</ng-template>
+
+<ng-template #footer>
+    <div fd-popover-body-footer>
+        <div fd-bar barDesign="footer" [cozy]="!compact">
+            <ng-content select="fd-user-actions-menu-footer"></ng-content>
+        </div>
+    </div>
+</ng-template>
+
 <ng-template #userLabel>
-    <fd-avatar
-        size="xs"
-        [colorAccent]="user.colorAccent"
-        [circle]="true"
-        [label]="user.fullName"
-    >
-    </fd-avatar>
+    <fd-avatar size="xs" [colorAccent]="user.colorAccent" [circle]="true" [label]="user.fullName"> </fd-avatar>
 </ng-template>
 
 <ng-template #userImage>
-    <fd-avatar
-        size="xs"
-        [colorAccent]="user.colorAccent"
-        [circle]="true"
-        [backgroundImage]="user.image"
-    >
-    </fd-avatar>
+    <fd-avatar size="xs" [colorAccent]="user.colorAccent" [circle]="true" [backgroundImage]="user.image"> </fd-avatar>
 </ng-template>
