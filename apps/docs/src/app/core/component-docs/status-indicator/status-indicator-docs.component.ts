@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { ExampleFile } from '../../../documentation/core-helpers/code-example/example-file';
 import * as StatusIndicatorDefaultComponent from '!raw-loader!./example/status-indicator-default.component.html';

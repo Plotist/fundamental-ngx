@@ -1,13 +1,10 @@
 import {
     Component,
-    OnInit,
     Input,
     ElementRef,
     OnChanges,
     ViewEncapsulation,
     ChangeDetectionStrategy,
-    ViewChild,
-    TemplateRef,
     AfterViewInit,
     ChangeDetectorRef
 } from '@angular/core';
@@ -29,11 +26,11 @@ export interface Points {
     styleUrls: ['./status-indicator.component.scss'],
     host: {
         '[attr.aria-label]': 'ariaLabel',
-        '[attr.aria-roledescription]': 'ariaRoledescription',
+        '[attr.aria-roledescription]': 'ariaRoleDescription',
         '[attr.focusable]': 'focusable',
         '[attr.title]': 'title',
         '[attr.role]': 'role',
-        '[attr.aria-valuetext]': 'ariaValuetext'
+        '[attr.aria-valuetext]': 'ariaValueText'
     },
     encapsulation: ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -89,7 +86,7 @@ export class StatusIndicatorComponent implements OnChanges, AfterViewInit {
 
     /** Aria defines role description for the Status Indicator. */
     @Input()
-    ariaRoledescription: string = null;
+    ariaRoleDescription: string = null;
 
     /** Aria Focusable for the Status Indicator. */
     @Input()
@@ -101,7 +98,7 @@ export class StatusIndicatorComponent implements OnChanges, AfterViewInit {
 
     /** Aria Value Text for the Status Indicator. */
     @Input()
-    ariaValuetext: string = null;
+    ariaValueText: string = null;
 
     /** Aria title for the status indicator. */
     @Input()
@@ -134,9 +131,6 @@ export class StatusIndicatorComponent implements OnChanges, AfterViewInit {
         this.fillDirection = direction;
     }
 
-    @ViewChild('maskTemplate')
-    maskTemplate: TemplateRef<any>;
-
     /**
      * FillingType to represent the fill pattern of the component
      */
@@ -160,27 +154,22 @@ export class StatusIndicatorComponent implements OnChanges, AfterViewInit {
     /** @hidden */
     y2: string;
     /** @hidden */
-    pointsArray: any[] = [];
+    pointsArray: string[] = [];
 
     /** @hidden */
     constructor(private _elementRef: ElementRef<HTMLElement>, private _cd: ChangeDetectorRef) {}
     ngAfterViewInit(): void {
-        this.angleCalculation();
+        this._angleCalculation();
         this._cd.detectChanges();
     }
 
     /** @hidden */
     ngOnChanges(): void {
-        this.calculateFilling();
+        this._calculateFilling();
     }
 
     /** @hidden */
-    elementRef(): ElementRef<HTMLElement> {
-        return this._elementRef;
-    }
-
-    /** @hidden */
-    private calculateFilling(): void {
+    private _calculateFilling(): void {
         if (this.fillPercentage < 0 || this.fillPercentage === undefined) {
             this.fillCalculator = 0;
         } else {
@@ -189,13 +178,13 @@ export class StatusIndicatorComponent implements OnChanges, AfterViewInit {
     }
 
     /** @hidden */
-    private angleCalculation(): void {
+    private _angleCalculation(): void {
         let sPointsAttributeValue: Array<Points>;
         let polygonPoints: string;
         switch (this.fillingType) {
             case 'angled':
-                this.binaryString = this.convertAngleToBinary(this.angle);
-                this.assignBinaryValue(this.binaryString);
+                this.binaryString = this._convertAngleToBinary(this.angle);
+                this._assignBinaryValue(this.binaryString);
                 break;
             case 'radial':
                 const tempPercent = this.fillCalculator % 1;
@@ -215,16 +204,16 @@ export class StatusIndicatorComponent implements OnChanges, AfterViewInit {
                 }
                 break;
             case 'linearup':
-                this.binaryString = this.convertAngleToBinary(90);
-                this.assignBinaryValue(this.binaryString);
+                this.binaryString = this._convertAngleToBinary(90);
+                this._assignBinaryValue(this.binaryString);
                 break;
             case 'lineardown':
-                this.binaryString = this.convertAngleToBinary(270);
-                this.assignBinaryValue(this.binaryString);
+                this.binaryString = this._convertAngleToBinary(270);
+                this._assignBinaryValue(this.binaryString);
                 break;
             case 'linearleft':
-                this.binaryString = this.convertAngleToBinary(180);
-                this.assignBinaryValue(this.binaryString);
+                this.binaryString = this._convertAngleToBinary(180);
+                this._assignBinaryValue(this.binaryString);
                 break;
             default:
                 throw new Error(`fdStatusIndicator: No fillType found for ${this.fillingType}.`);
@@ -232,7 +221,7 @@ export class StatusIndicatorComponent implements OnChanges, AfterViewInit {
     }
 
     /** @hidden */
-    private convertAngleToBinary(angle: number): string {
+    private _convertAngleToBinary(angle: number): string {
         if (angle > 0 && angle <= 45) {
             return '1,0,0,1';
         } else if (angle >= 45 && angle < 90) {
@@ -257,7 +246,7 @@ export class StatusIndicatorComponent implements OnChanges, AfterViewInit {
     }
 
     /** @hidden */
-    private assignBinaryValue(binaryString: string): void {
+    private _assignBinaryValue(binaryString: string): void {
         let binaryValue = [];
         binaryValue = binaryString.split(',');
         this.x1 = binaryValue[0];
@@ -287,7 +276,7 @@ export class StatusIndicatorComponent implements OnChanges, AfterViewInit {
         const oCentrePoint = this._createPoint(oBox.x + oBox.width / 2, oBox.y + oBox.height / 2);
 
         // Reflects x coordinate by centre point for Counter Clockwise type
-        function adjustIfCounterClockwise(oPoint: Points): Points {
+        function _adjustIfCounterClockwise(oPoint: Points): Points {
             const oResult = Object.assign({}, oPoint);
 
             if (that._fillDirection === 'anticlock') {
@@ -316,11 +305,11 @@ export class StatusIndicatorComponent implements OnChanges, AfterViewInit {
         if (0 < iAngle && iAngle < 45) {
             iXDifferenceFromBoundaryCentre = computeDifferenceFromBoundaryCentre(iAngle, 0, oBox.height);
             oPolygonPoint = this._createPoint(oStartPoint.x - iXDifferenceFromBoundaryCentre, oStartPoint.y);
-            aPoints.push(adjustIfCounterClockwise(oPolygonPoint));
+            aPoints.push(_adjustIfCounterClockwise(oPolygonPoint));
         }
 
         if (45 <= iAngle) {
-            aPoints.push(adjustIfCounterClockwise(this._createPoint(oBox.x + oBox.width, oBox.y)));
+            aPoints.push(_adjustIfCounterClockwise(this._createPoint(oBox.x + oBox.width, oBox.y)));
         }
 
         if (45 < iAngle && iAngle < 135) {
@@ -329,11 +318,11 @@ export class StatusIndicatorComponent implements OnChanges, AfterViewInit {
                 oBox.x + oBox.width,
                 oBox.y + oBox.height / 2 - iYDifferenceFromBoundaryCentre
             );
-            aPoints.push(adjustIfCounterClockwise(oPolygonPoint));
+            aPoints.push(_adjustIfCounterClockwise(oPolygonPoint));
         }
 
         if (135 <= iAngle) {
-            aPoints.push(adjustIfCounterClockwise(this._createPoint(oBox.x + oBox.width, oBox.y + oBox.height)));
+            aPoints.push(_adjustIfCounterClockwise(this._createPoint(oBox.x + oBox.width, oBox.y + oBox.height)));
         }
 
         if (135 < iAngle && iAngle < 225) {
@@ -342,27 +331,27 @@ export class StatusIndicatorComponent implements OnChanges, AfterViewInit {
                 oBox.x + oBox.width / 2 + iXDifferenceFromBoundaryCentre,
                 oBox.y + oBox.height
             );
-            aPoints.push(adjustIfCounterClockwise(oPolygonPoint));
+            aPoints.push(_adjustIfCounterClockwise(oPolygonPoint));
         }
 
         if (225 <= iAngle) {
-            aPoints.push(adjustIfCounterClockwise(this._createPoint(oBox.x, oBox.y + oBox.height)));
+            aPoints.push(_adjustIfCounterClockwise(this._createPoint(oBox.x, oBox.y + oBox.height)));
         }
 
         if (225 < iAngle && iAngle < 315) {
             iYDifferenceFromBoundaryCentre = computeDifferenceFromBoundaryCentre(iAngle, 270, oBox.width);
             oPolygonPoint = this._createPoint(oBox.x, oBox.y + oBox.height / 2 + iYDifferenceFromBoundaryCentre);
-            aPoints.push(adjustIfCounterClockwise(oPolygonPoint));
+            aPoints.push(_adjustIfCounterClockwise(oPolygonPoint));
         }
 
         if (315 <= iAngle) {
-            aPoints.push(adjustIfCounterClockwise(this._createPoint(oBox.x, oBox.y)));
+            aPoints.push(_adjustIfCounterClockwise(this._createPoint(oBox.x, oBox.y)));
         }
 
         if (315 < iAngle && iAngle <= 360) {
             iXDifferenceFromBoundaryCentre = computeDifferenceFromBoundaryCentre(iAngle, 360, oBox.height);
             oPolygonPoint = this._createPoint(oBox.x + oBox.width / 2 - iXDifferenceFromBoundaryCentre, oBox.y);
-            aPoints.push(adjustIfCounterClockwise(oPolygonPoint));
+            aPoints.push(_adjustIfCounterClockwise(oPolygonPoint));
         }
 
         aPoints.push(oCentrePoint);
