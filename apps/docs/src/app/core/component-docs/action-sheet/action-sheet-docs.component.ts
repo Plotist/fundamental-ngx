@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 
-import * as ActionSheetSrc from '!raw-loader!./examples/action-sheet/action-sheet-example.component.html';
-import * as ActionSheetSrcTs from '!raw-loader!./examples/action-sheet/action-sheet-example.component.ts';
+import * as actionSheetCompactSrc from '!raw-loader!./examples/action-sheet-compact/action-sheet-compact-example.component.html';
+import * as actionSheetCompactSrcTs from '!raw-loader!./examples/action-sheet-compact/action-sheet-compact-example.component.ts';
+import * as actionSheetCosySrc from '!raw-loader!./examples/action-sheet-cosy/action-sheet-cosy-example.component.html';
+import * as actionSheetCosySrcTs from '!raw-loader!./examples/action-sheet-cosy/action-sheet-cosy-example.component.ts';
 import * as actionSheetMobileSrc from '!raw-loader!./examples/action-sheet-mobile/action-sheet-mobile-example.component.html';
 import * as actionSheetMobileSrcTs from '!raw-loader!./examples/action-sheet-mobile/action-sheet-mobile-example.component.ts';
 import { ExampleFile } from '../../../documentation/core-helpers/code-example/example-file';
@@ -11,17 +13,31 @@ import { ExampleFile } from '../../../documentation/core-helpers/code-example/ex
     templateUrl: './action-sheet-docs.component.html'
 })
 export class ActionSheetDocsComponent {
-    actionSheetExample: ExampleFile[] = [
+    actionSheetCompactExample: ExampleFile[] = [
         {
             language: 'html',
-            code: ActionSheetSrc,
-            fileName: 'action-sheet-example'
+            code: actionSheetCompactSrc,
+            fileName: 'action-sheet-compact-example',
         },
         {
             language: 'typescript',
-            code: ActionSheetSrcTs,
-            fileName: 'action-sheet-example',
-            component: 'ActionSheetExampleComponent'
+            code: actionSheetCompactSrcTs,
+            fileName: 'action-sheet-compact-example',
+            component: 'ActionSheetCompactExampleComponent'
+        }
+    ];
+
+    actionSheetCosyExample: ExampleFile[] = [
+        {
+            language: 'html',
+            code: actionSheetCosySrc,
+            fileName: 'action-sheet-cosy-example',
+        },
+        {
+            language: 'typescript',
+            code: actionSheetCosySrcTs,
+            fileName: 'action-sheet-cosy-example',
+            component: 'ActionSheetCosyExampleComponent'
         }
     ];
 
@@ -29,7 +45,7 @@ export class ActionSheetDocsComponent {
         {
             language: 'html',
             code: actionSheetMobileSrc,
-            fileName: 'action-sheet-mobile-example'
+            fileName: 'action-sheet-mobile-example',
         },
         {
             language: 'typescript',
