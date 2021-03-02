@@ -5,12 +5,14 @@ import {
     ElementRef,
     EventEmitter,
     forwardRef,
-    Input,
+    Input, OnDestroy, OnInit,
     Output,
     ViewChild,
     ViewEncapsulation
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Subscription } from 'rxjs';
+import { ContentDensityService } from '../utils/public_api';
 
 let switchUniqueId = 0;
 
@@ -36,7 +38,7 @@ let switchUniqueId = 0;
     encapsulation: ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SwitchComponent implements ControlValueAccessor {
+export class SwitchComponent implements ControlValueAccessor, OnInit, OnDestroy {
     /** @hidden */
     @ViewChild('switchInput')
     inputElement: ElementRef<HTMLInputElement>;
@@ -71,7 +73,7 @@ export class SwitchComponent implements ControlValueAccessor {
 
     /** Whether the switch is compact */
     @Input()
-    compact = false;
+    compact: boolean = null;
 
     /** aria-label attribute of the inner input element. */
     @Input()
@@ -97,12 +99,29 @@ export class SwitchComponent implements ControlValueAccessor {
     readonly checkedChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
     /** @hidden */
+    private _subscriptions = new Subscription();
+
+    /** @hidden */
     onChange: Function = () => {};
 
     /** @hidden */
     onTouched: Function = () => {};
 
-    constructor(private readonly _changeDetectorRef: ChangeDetectorRef) {}
+    constructor(private readonly _changeDetectorRef: ChangeDetectorRef, private _contentDensityService: ContentDensityService) {}
+
+    /** @hidden */
+    ngOnInit(): void {
+        if (this.compact === null) {
+            this._subscriptions.add(this._contentDensityService.contentDensity.subscribe(density => {
+                this.compact = density === 'compact';
+            }))
+        }
+    }
+
+    /** @hidden */
+    ngOnDestroy(): void {
+        this._subscriptions.unsubscribe();
+    }
 
     /** Set focus on the input element. */
     focus(): void {

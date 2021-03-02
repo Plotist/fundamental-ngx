@@ -8,7 +8,7 @@ import {
     EventEmitter,
     Input,
     OnChanges,
-    OnDestroy,
+    OnDestroy, OnInit,
     Output,
     SimpleChanges,
     TemplateRef,
@@ -22,6 +22,7 @@ import { MenuItemComponent } from '../menu/menu-item/menu-item.component';
 import { Subscription } from 'rxjs';
 import { MainAction } from './main-action';
 import { first } from 'rxjs/operators';
+import { ContentDensityService } from '../utils/public_api';
 
 /**
  * Split Button component, used to enhance standard HTML button and add possibility to put some dropdown with
@@ -51,11 +52,11 @@ import { first } from 'rxjs/operators';
     changeDetection: ChangeDetectionStrategy.OnPush,
     encapsulation: ViewEncapsulation.None
 })
-export class SplitButtonComponent implements AfterContentInit, OnChanges, OnDestroy {
+export class SplitButtonComponent implements AfterContentInit, OnChanges, OnDestroy, OnInit {
 
     /** Whether to apply compact mode to the button. */
     @Input()
-    compact: boolean;
+    compact: boolean = null;
 
     /** The icon to include in the button. See the icon page for the list of icons. */
     @Input()
@@ -119,7 +120,10 @@ export class SplitButtonComponent implements AfterContentInit, OnChanges, OnDest
     private _menuSubscription = new Subscription();
 
     /** @hidden */
-    constructor(private _cdRef: ChangeDetectorRef, private _elRef: ElementRef) {}
+    private _contentDensitySubscription = new Subscription();
+
+    /** @hidden */
+    constructor(private _cdRef: ChangeDetectorRef, private _elRef: ElementRef, private _contentDensityService: ContentDensityService) {}
 
     /** @hidden Emits event when main button is clicked */
     onMainButtonClick(event: MouseEvent): void {
@@ -130,6 +134,16 @@ export class SplitButtonComponent implements AfterContentInit, OnChanges, OnDest
             this.mainAction.callback();
         }
         event.stopPropagation();
+    }
+
+    /** @hidden */
+    ngOnInit(): void {
+        if (this.compact === null) {
+            this._contentDensitySubscription.add(this._contentDensityService.contentDensity.subscribe(density => {
+                this.compact = density === 'compact';
+                this._cdRef.detectChanges();
+            }))
+        }
     }
 
     /** @hidden */
@@ -158,6 +172,7 @@ export class SplitButtonComponent implements AfterContentInit, OnChanges, OnDest
     ngOnDestroy(): void {
         this._menuItemSubscriptions.unsubscribe();
         this._menuSubscription.unsubscribe();
+        this._contentDensitySubscription.unsubscribe();
     }
 
     /** Function called to select a menu item for the split button. */

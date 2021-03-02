@@ -26,7 +26,7 @@ import { FormControlComponent } from '../form/form-control/form-control.componen
 import { TokenComponent } from './token.component';
 import { RtlService } from '../utils/services/rtl.service';
 import { Subscription } from 'rxjs';
-import { applyCssClass, CssClassBuilder } from '../utils/public_api';
+import { applyCssClass, ContentDensityService, CssClassBuilder } from '../utils/public_api';
 import { KeyUtil } from '../utils/functions';
 import { A, BACKSPACE, DELETE, ENTER, LEFT_ARROW, RIGHT_ARROW, SPACE } from '@angular/cdk/keycodes';
 
@@ -77,7 +77,7 @@ export class TokenizerComponent implements AfterViewChecked, AfterViewInit, Afte
 
     /** Whether the tokenizer is compact */
     @Input()
-    compact = false;
+    compact: boolean = null;
 
     /** Whether to use cozy visuals but compact collapsing behavior. */
     @Input()
@@ -123,6 +123,9 @@ export class TokenizerComponent implements AfterViewChecked, AfterViewInit, Afte
 
     /** @hidden */
     tokenListClickSubscriptions: Subscription[] = [];
+
+    /** @hidden */
+    private _contentDensitySubscription = new Subscription();
 
     /** @hidden */
     hiddenCozyTokenCount = 0;
@@ -183,10 +186,18 @@ export class TokenizerComponent implements AfterViewChecked, AfterViewInit, Afte
             this.tokenListChangesSubscription.unsubscribe();
         }
         this._unsubscribeClicks();
+        this._contentDensitySubscription.unsubscribe();
     }
 
     /** @hidden */
     ngOnInit(): void {
+        if (this.compact === null) {
+            this._contentDensitySubscription.add(this._contentDensityService.contentDensity.subscribe(density => {
+                this.compact = density === 'compact';
+                this.buildComponentCssClass();
+                this._cdRef.detectChanges();
+            }))
+        }
         this.buildComponentCssClass();
     }
 
@@ -196,6 +207,7 @@ export class TokenizerComponent implements AfterViewChecked, AfterViewInit, Afte
     }
 
     constructor(private _elementRef: ElementRef,
+        private _contentDensityService: ContentDensityService,
         private _cdRef: ChangeDetectorRef,
         @Optional() private _rtlService: RtlService,
         private _renderer: Renderer2) {
