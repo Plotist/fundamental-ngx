@@ -4,37 +4,52 @@ import {
     ElementRef,
     HostBinding,
     Input,
-    OnChanges,
+    OnChanges, OnDestroy,
     OnInit,
     Renderer2
 } from '@angular/core';
 import { InputGroupPlacement } from './input-group.component';
 import { FormStates } from '../form/form-control/form-states';
-import { applyCssClass, CssClassBuilder } from '../utils/public_api';
+import { applyCssClass, ContentDensityService, CssClassBuilder } from '../utils/public_api';
+import { Subscription } from 'rxjs';
 
 @Directive({
     // tslint:disable-next-line:directive-selector
     selector: '[fd-input-group-input]'
 })
-export class InputGroupInputDirective implements CssClassBuilder, OnInit, OnChanges {
+export class InputGroupInputDirective implements CssClassBuilder, OnInit, OnChanges, OnDestroy {
     /** user's custom classes */
     @Input()
     class: string;
 
     @Input()
-    compact = false;
+    compact: boolean = null;
 
     /** @hidden */
-    constructor(private _elementRef: ElementRef) {}
+    private _subscriptions = new Subscription();
+
+    /** @hidden */
+    constructor(private _elementRef: ElementRef, private _contentDensityService: ContentDensityService) {}
 
     /** @hidden */
     ngOnInit(): void {
+        if (this.compact === null) {
+            this._subscriptions.add(this._contentDensityService.contentDensity.subscribe(density => {
+                this.compact = density === 'compact';
+                this.buildComponentCssClass();
+            }));
+        }
         this.buildComponentCssClass();
     }
 
     /** @hidden */
     ngOnChanges(): void {
         this.buildComponentCssClass();
+    }
+
+    /** @hidden */
+    ngOnDestroy(): void {
+        this._subscriptions.unsubscribe();
     }
 
     @applyCssClass
@@ -61,7 +76,7 @@ export class InputGroupTextareaDirective {}
     // tslint:disable-next-line:directive-selector
     selector: '[fd-input-group-addon]'
 })
-export class InputGroupAddOnDirective implements OnInit, OnChanges, CssClassBuilder, AfterContentInit {
+export class InputGroupAddOnDirective implements OnInit, OnChanges, CssClassBuilder, AfterContentInit, OnDestroy {
     /** user's custom classes */
     @Input()
     class: string;
@@ -78,7 +93,7 @@ export class InputGroupAddOnDirective implements OnInit, OnChanges, CssClassBuil
 
     /** Whether to apply compact mode to the AddOn. */
     @Input()
-    compact = false;
+    compact: boolean = null;
 
     /**
      * The placement of the add-on. Options include *before* and *after*
@@ -100,10 +115,19 @@ export class InputGroupAddOnDirective implements OnInit, OnChanges, CssClassBuil
     button = false;
 
     /** @hidden */
-    constructor(private _elementRef: ElementRef, private renderer: Renderer2) {}
+    private _subscriptions = new Subscription();
+
+    /** @hidden */
+    constructor(private _elementRef: ElementRef, private renderer: Renderer2, private _contentDensityService: ContentDensityService) {}
 
     /** @hidden */
     ngOnInit(): void {
+        if (this.compact === null) {
+            this._subscriptions.add(this._contentDensityService.contentDensity.subscribe(density => {
+                this.compact = density === 'compact';
+                this.buildComponentCssClass();
+            }));
+        }
         this.buildComponentCssClass();
     }
 
@@ -119,6 +143,11 @@ export class InputGroupAddOnDirective implements OnInit, OnChanges, CssClassBuil
         if (button) {
             this.renderer.addClass(button, 'fd-input-group__button');
         }
+    }
+
+    /** @hidden */
+    ngOnDestroy(): void {
+        this._subscriptions.unsubscribe();
     }
 
     @applyCssClass

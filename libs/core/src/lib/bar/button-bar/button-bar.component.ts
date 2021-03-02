@@ -2,7 +2,7 @@ import { Component, HostBinding, Input, OnInit, ViewChild } from '@angular/core'
 import { BaseButton, ButtonType } from '../../button/base-button';
 import { ButtonComponent } from '../../button/button.component';
 import { Observable } from 'rxjs';
-import { ContentDensityService } from '@fundamental-ngx/core';
+import { ContentDensityService } from '../../utils/public_api';
 import { map } from 'rxjs/operators';
 
 @Component({

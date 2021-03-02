@@ -30,7 +30,7 @@ import { FormStates } from '../form/form-control/form-states';
 import { createMissingDateImplementationError } from './errors';
 import { PopoverFormMessageService } from '../form/form-message/popover-form-message.service';
 import { PopoverService } from '../popover/popover-service/popover.service';
-import { ContentDensityService } from '../..';
+import { ContentDensityService } from '../utils/public_api';
 
 /**
  * The datetime picker component is an opinionated composition of the fd-popover,

@@ -31,7 +31,7 @@ import {
     CalendarAggregatedYearViewComponent
     // Comment to fix max-line-length error
 } from './calendar-views/calendar-aggregated-year-view/calendar-aggregated-year-view.component';
-import { ContentDensityService } from '../..';
+import { ContentDensityService } from '../utils/public_api';
 import { Subscription } from 'rxjs';
 
 let calendarUniqueId = 0;

@@ -21,7 +21,7 @@ import { MenuComponent } from '../menu/menu.component';
 import { Placement } from 'popper.js';
 import { ENTER, SPACE } from '@angular/cdk/keycodes';
 import { map } from 'rxjs/operators';
-import { ContentDensityService } from '../..';
+import { ContentDensityService } from '../utils/public_api';
 
 /**
  * Breadcrumb parent wrapper directive. Must have breadcrumb item child directives.

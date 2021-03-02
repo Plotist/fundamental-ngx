@@ -51,7 +51,7 @@ import {
     TAB,
     UP_ARROW
 } from '@angular/cdk/keycodes';
-import { ContentDensityService } from '../..';
+import { ContentDensityService } from '../utils/public_api';
 
 let comboboxUniqueId = 0;
 

@@ -31,7 +31,7 @@ import { ActionSheetItemComponent, ActionSheetClickEvent } from './action-sheet-
 import { map, startWith, takeUntil } from 'rxjs/operators';
 import { Subject, merge, Observable, Subscription } from 'rxjs';
 import { ActionSheetMobileComponent } from './action-sheet-mobile/action-sheet-mobile.component';
-import { ContentDensityService } from '../..';
+import { ContentDensityService } from '../utils/public_api';
 
 @Component({
     selector: 'fd-action-sheet',
