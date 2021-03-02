@@ -1,6 +1,9 @@
-import { Component, HostBinding, Input, ViewChild } from '@angular/core';
+import { Component, HostBinding, Input, OnInit, ViewChild } from '@angular/core';
 import { BaseButton, ButtonType } from '../../button/base-button';
 import { ButtonComponent } from '../../button/button.component';
+import { Observable } from 'rxjs';
+import { ContentDensityService } from '@fundamental-ngx/core';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'fd-button-bar',
@@ -9,7 +12,7 @@ import { ButtonComponent } from '../../button/button.component';
               [type]="type"
               [glyphPosition]="glyphPosition"
               [glyph]="glyph"
-              [compact]="compact"
+              [compact]="compact$ ? (compact$ | async) : compact"
               [fdType]="fdType"
               [label]="label"
               [fdMenu]="fdMenu"
@@ -19,17 +22,18 @@ import { ButtonComponent } from '../../button/button.component';
       </button>
   `
 })
-export class ButtonBarComponent extends BaseButton {
+export class ButtonBarComponent extends BaseButton implements OnInit {
     /** Whether the element should take the whole width of the container. */
     @Input()
     @HostBinding('class.fd-bar__element--full-width')
     fullWidth = false;
 
-    /** Whether to apply compact mode to the button.
-     * Default value is set to true
-     */
+    /** Whether to apply compact mode to the button. */
     @Input()
-    compact = true;
+    compact: boolean = null;
+
+    /** @hidden Observable to use if compact input not provided */
+    compact$: Observable<boolean>;
 
     /** The type of the button. Types include:
      * 'standard' | 'positive' | 'negative' | 'attention' | 'half' | 'ghost' | 'transparent' | 'emphasized' | 'menu'.
@@ -45,4 +49,17 @@ export class ButtonBarComponent extends BaseButton {
     /** @hidden */
     @ViewChild(ButtonComponent)
     _buttonComponent: ButtonComponent;
+
+    constructor(private _contentDensityService: ContentDensityService) {
+        super();
+    }
+
+    /** @hidden */
+    ngOnInit(): void {
+        if (this.compact === null) {
+            this.compact$ = this._contentDensityService.contentDensity.pipe(
+                map(density => density === 'compact')
+            );
+        }
+    }
 }

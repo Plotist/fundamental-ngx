@@ -6,13 +6,14 @@ import {
     ViewEncapsulation,
     ChangeDetectionStrategy,
     Input,
-    HostBinding
+    HostBinding, OnDestroy
 } from '@angular/core';
 
-import { applyCssClass, CssClassBuilder } from '../utils/public_api';
+import { applyCssClass, ContentDensityService, CssClassBuilder } from '../utils/public_api';
 
 import { CLASS_NAME, CardType } from './constants';
 import { getCardModifierClassNameByCardType } from './utils';
+import { Subscription } from 'rxjs';
 
 let cardId = 0;
 
@@ -23,7 +24,7 @@ let cardId = 0;
     encapsulation: ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CardComponent implements OnChanges, OnInit, CssClassBuilder {
+export class CardComponent implements OnChanges, OnInit, CssClassBuilder, OnDestroy {
     /** Badge */
     @Input() badge: string;
 
@@ -31,7 +32,7 @@ export class CardComponent implements OnChanges, OnInit, CssClassBuilder {
      * Whether to apply compact mode
      */
     @Input()
-    compact: boolean;
+    compact: boolean = null;
 
     /** Indicates when card should show a loader  */
     @Input()
@@ -58,7 +59,10 @@ export class CardComponent implements OnChanges, OnInit, CssClassBuilder {
     class: string;
 
     /** @hidden */
-    constructor(private _elementRef: ElementRef<HTMLElement>) {}
+    private _subscriptions = new Subscription();
+
+    /** @hidden */
+    constructor(private _elementRef: ElementRef<HTMLElement>, private _contentDensityService: ContentDensityService) {}
 
     /** @hidden */
     ngOnChanges(): void {
@@ -68,6 +72,17 @@ export class CardComponent implements OnChanges, OnInit, CssClassBuilder {
     /** @hidden */
     ngOnInit(): void {
         this.buildComponentCssClass();
+        if (this.compact === null) {
+            this._subscriptions.add(this._contentDensityService.contentDensity.subscribe(density => {
+                this.compact = density === 'compact';
+                this.buildComponentCssClass();
+            }));
+        }
+    }
+
+    /** @hidden */
+    ngOnDestroy(): void {
+        this._subscriptions.unsubscribe();
     }
 
     @applyCssClass

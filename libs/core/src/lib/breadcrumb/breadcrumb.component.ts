@@ -15,11 +15,13 @@ import {
 } from '@angular/core';
 import { BreadcrumbItemDirective } from './breadcrumb-item.directive';
 import { RtlService } from '../utils/services/rtl.service';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { KeyUtil } from '../utils/functions';
 import { MenuComponent } from '../menu/menu.component';
 import { Placement } from 'popper.js';
 import { ENTER, SPACE } from '@angular/cdk/keycodes';
+import { map } from 'rxjs/operators';
+import { ContentDensityService } from '../..';
 
 /**
  * Breadcrumb parent wrapper directive. Must have breadcrumb item child directives.
@@ -48,7 +50,10 @@ export class BreadcrumbComponent implements AfterContentInit, OnInit {
 
     /** Whenever links wrapped inside overflow should be displayed in compact mode  */
     @Input()
-    compact = false;
+    compact: boolean = null;
+
+    /** @hidden Observable to use if compact input not provided */
+    compact$: Observable<boolean>;
 
     /** @hidden */
     @ContentChildren(forwardRef(() => BreadcrumbItemDirective))
@@ -192,9 +197,14 @@ export class BreadcrumbComponent implements AfterContentInit, OnInit {
         if (this.rtlService) {
             this.rtlService.rtl.subscribe((value) => this.placement$.next(value ? 'bottom-end' : 'bottom-start'));
         }
+        if (this.compact === null) {
+            this.compact$ = this._contentDensityService.contentDensity.pipe(
+                map(density => density === 'compact')
+            );
+        }
     }
 
-    constructor(public elementRef: ElementRef, @Optional() private rtlService: RtlService) {}
+    constructor(public elementRef: ElementRef, @Optional() private rtlService: RtlService, private _contentDensityService: ContentDensityService) {}
 
     private fitInBoundries(): boolean {
         return this.elementRef.nativeElement.getBoundingClientRect().width < this.getContainerBoundary();

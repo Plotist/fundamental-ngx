@@ -5,6 +5,7 @@
             fdType="transparent"
             glyph="menu2"
             aria-label="Switch Navigation"
+            [compact]="false"
             (click)="this.btnClicked.emit()"></button>
     <fd-shellbar-logo>
         <a aria-label="Home"
@@ -27,6 +28,7 @@
         <button fd-button
                 class="fd-shellbar__button--menu fd-docs--theme-menu"
                 fdType="transparent"
+                [compact]="false"
                 [fdMenu]="true"
                 [fdMenuTrigger]="densityMenu">
             Content Density
@@ -56,6 +58,7 @@
                 glyph="palette"
                 class="fd-shellbar__button--menu fd-docs--theme-menu"
                 fdType="transparent"
+                [compact]="false"
                 [fdMenu]="true"
                 [fdMenuTrigger]="themesMenu">
         </button>
@@ -70,7 +73,7 @@
             </li>
         </fd-menu>
 
-        <button fd-button fdType="transparent" [fdMenu]="true" [fdMenuTrigger]="versionsMenu"
+        <button fd-button fdType="transparent" [fdMenu]="true" [fdMenuTrigger]="versionsMenu" [compact]="false"
                 class="fd-shellbar__button--menu fd-docs--toolbar__version fd-docs--theme-menu">
             v {{ version.id }}
         </button>

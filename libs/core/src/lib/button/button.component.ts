@@ -8,8 +8,10 @@ import {
     OnInit,
     ViewEncapsulation
 } from '@angular/core';
-import { applyCssClass, CssClassBuilder } from '../utils/public_api';
+import { applyCssClass, ContentDensityService, CssClassBuilder } from '../utils/public_api';
 import { BaseButton } from './base-button';
+import { Observable, Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 
 /**
@@ -40,10 +42,17 @@ export class ButtonComponent extends BaseButton implements OnChanges, CssClassBu
     @Input()
     class = '';
 
+    /** @hidden Observable to use if compact input not provided */
+    compact$: Observable<boolean>;
+
+    /** @hidden */
+    private _subscriptions = new Subscription();
+
     /** @hidden */
     constructor(
         private _elementRef: ElementRef,
-        private _changeDetectorRef: ChangeDetectorRef
+        private _changeDetectorRef: ChangeDetectorRef,
+        private _contentDensityService: ContentDensityService
     ) {
         super()
     }
@@ -57,6 +66,12 @@ export class ButtonComponent extends BaseButton implements OnChanges, CssClassBu
     }
 
     public ngOnInit(): void {
+        if (this.compact === null) {
+            this._subscriptions.add(this._contentDensityService.contentDensity.subscribe(density => {
+                this.compact = density === 'compact';
+                this.buildComponentCssClass();
+            }));
+        }
         this.buildComponentCssClass();
     }
 

@@ -7,7 +7,7 @@ import {
     forwardRef,
     HostBinding,
     Inject,
-    Input,
+    Input, OnInit,
     Optional,
     ViewChild,
     ViewEncapsulation
@@ -18,6 +18,9 @@ import { compareObjects, KeyUtil } from '../../utils/functions';
 import { Platform } from '@angular/cdk/platform';
 import { LIST_ITEM_COMPONENT, ListItemInterface } from '../../list/list-item/list-item-utils';
 import { SPACE } from '@angular/cdk/keycodes';
+import { ContentDensityService } from '../../..';
+import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 let checkboxUniqueId = 0;
 
@@ -37,7 +40,7 @@ export type fdCheckboxTypes = 'checked' | 'unchecked' | 'indeterminate' | 'force
         }
     ]
 })
-export class CheckboxComponent implements ControlValueAccessor {
+export class CheckboxComponent implements ControlValueAccessor, OnInit {
     /** @hidden */
     @ViewChild('inputLabel')
     inputLabel: ElementRef;
@@ -84,7 +87,10 @@ export class CheckboxComponent implements ControlValueAccessor {
 
     /** Allows to minimize control to compact mode. */
     @Input()
-    compact: boolean;
+    compact: boolean = null;
+
+    /** @hidden Observable to use if compact input not provided */
+    compact$: Observable<boolean>;
 
     /** Enables controls third state. */
     @Input()
@@ -130,9 +136,19 @@ export class CheckboxComponent implements ControlValueAccessor {
         @Attribute('tabIndexValue') public tabIndexValue: number = 0,
         private _platform: Platform,
         private _changeDetectorRef: ChangeDetectorRef,
+        private _contentDensityService: ContentDensityService,
         @Optional() @Inject(LIST_ITEM_COMPONENT) private _listItemComponent: ListItemInterface
     ) {
         this.tabIndexValue = tabIndexValue;
+    }
+
+    /** @hidden */
+    ngOnInit(): void {
+        if (this.compact === null) {
+            this.compact$ = this._contentDensityService.contentDensity.pipe(
+                map(density => density === 'compact')
+            );
+        }
     }
 
     /** @hidden Used to define if control is in 'indeterminate' state.*/
