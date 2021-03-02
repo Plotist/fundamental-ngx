@@ -4,6 +4,7 @@ import { Component, ViewChild } from '@angular/core';
 
 import { CheckboxComponent } from './checkbox.component';
 import { whenStable } from '../../utils/tests/when-stable';
+import { ContentDensityService } from '../../utils/public_api';
 
 function getCheckboxInput(fixture: ComponentFixture<any>): any {
     return fixture.nativeElement.querySelector('input');
@@ -33,7 +34,8 @@ describe('CheckboxComponent', () => {
     beforeEach(waitForAsync(() => {
         TestBed.configureTestingModule({
             imports: [FormsModule],
-            declarations: [CheckboxComponent, TestCheckboxComponent]
+            declarations: [CheckboxComponent, TestCheckboxComponent],
+            providers: [ContentDensityService]
         }).compileComponents();
     }));
 

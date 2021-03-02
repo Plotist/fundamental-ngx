@@ -4,6 +4,7 @@ import { FdDate, FdDatetimeModule } from '../../datetime';
 import { ButtonModule } from '../../button/button.module';
 import { CalendarService } from '../calendar.service';
 import { CalendarHeaderComponent } from './calendar-header.component';
+import { ContentDensityService } from '../../utils/public_api';
 
 describe('Calendar2HeaderComponent', () => {
     let component: CalendarHeaderComponent<FdDate>;
@@ -14,7 +15,7 @@ describe('Calendar2HeaderComponent', () => {
             TestBed.configureTestingModule({
                 declarations: [CalendarHeaderComponent],
                 imports: [ButtonModule, FdDatetimeModule],
-                providers: [CalendarService]
+                providers: [CalendarService, ContentDensityService]
             }).compileComponents();
         })
     );

@@ -7,6 +7,7 @@ import { SelectComponent } from './select.component';
 import { PopoverComponent } from '../popover/popover.component';
 import { SelectModule } from './select.module';
 import { SelectKeyManagerService } from './select-key-manager.service';
+import { ContentDensityService } from '../utils/public_api';
 
 
 @Component({
@@ -74,7 +75,8 @@ describe('SelectComponent', () => {
     beforeEach(waitForAsync(() => {
         TestBed.configureTestingModule({
             declarations: [TestWrapperComponent, TestFilteringWrapperComponent],
-            imports: [SelectModule]
+            imports: [SelectModule],
+            providers: [ContentDensityService]
         })
             .overrideComponent(SelectComponent, {
                 set: { changeDetection: ChangeDetectionStrategy.Default }

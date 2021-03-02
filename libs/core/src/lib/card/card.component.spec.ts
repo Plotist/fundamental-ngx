@@ -7,6 +7,7 @@ import { CardModule } from './card.module';
 import { CardComponent } from './card.component';
 import { CardType, CLASS_NAME } from './constants';
 import { getCardModifierClassNameByCardType } from './utils';
+import { ContentDensityService } from '../utils/public_api';
 
 @Component({
     template: `
@@ -42,7 +43,8 @@ describe('CardComponent', () => {
     beforeEach(waitForAsync(() => {
         TestBed.configureTestingModule({
             imports: [CommonModule, CardModule],
-            declarations: [CardHostTestComponent]
+            declarations: [CardHostTestComponent],
+            providers: [ContentDensityService]
         }).compileComponents();
     }));
 

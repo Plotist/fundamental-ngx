@@ -9,6 +9,7 @@ import { CalendarModule } from '../calendar/calendar.module';
 import { ButtonModule } from '../button/button.module';
 import { InputGroupModule } from '../input-group/input-group.module';
 import { DateRange } from '../calendar/models/date-range';
+import { ContentDensityService } from '../utils/public_api';
 
 describe('DatePickerComponent', () => {
     let component: DatePickerComponent<FdDate>;
@@ -27,7 +28,8 @@ describe('DatePickerComponent', () => {
                     IconModule,
                     InputGroupModule,
                     ButtonModule
-                ]
+                ],
+                providers: [ContentDensityService]
             }).compileComponents();
         })
     );
