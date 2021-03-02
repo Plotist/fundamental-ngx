@@ -4,8 +4,9 @@
 <description>
     The Status Indicator component follows fundamental-styles for Status Indicator guidelines. Use the
     <code class="code-snippet">[path]=""</code> property to set the path/image to be loaded into the component.
-    <code class="code-snippet">[viewBox]=""</code> property to set for positioning of the Image inside the defined set
-    of Height and Width.
+    <code class="code-snippet">[viewBox]=""</code> property value given from the svg image HTML .
+    <code class="code-snippet">[fillPercentage]=""</code> property number value defines the filling color percentage of
+    the image.
 </description>
 <component-example>
     <fd-status-indicator-default></fd-status-indicator-default>
@@ -16,7 +17,10 @@
 <fd-docs-section-title id="sizeStatusIndicator'" componentName="StatusIndicator">
     Status Indicator Size
 </fd-docs-section-title>
-<description> Use the <code class="code-snippet">[size]=""</code> property to set image size to the SVG. </description>
+<description>
+    Use the <code class="code-snippet">[size]=""</code> property to set image size to the SVG. this property accepts the
+    following values<code class="code-snippet">[status]="'sm' | 'md(default)'|,'lg' | 'xl'" </code></description
+>
 <component-example>
     <fd-status-indicator-size></fd-status-indicator-size>
 </component-example>
