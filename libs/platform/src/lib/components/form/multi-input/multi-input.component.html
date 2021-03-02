@@ -35,7 +35,7 @@
         [disabled]="disabled"
         [compact]="contentDensity === 'compact'"
         (keydown)="removeSelectedTokens($event)"
-        (addOnButtonClicked)="!mobile && moreClicked()"
+        (addOnButtonClicked)="!mobile && addOnButtonClick()"
         (click)="mobile && onPrimaryButtonClick(false)"
     >
         <fd-tokenizer

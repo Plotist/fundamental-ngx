@@ -210,6 +210,13 @@ export class PlatformMultiInputComponent extends BaseMultiInput implements OnIni
     }
 
     /** @hidden */
+    addOnButtonClick(): void {
+        this.searchTermChanged('');
+        this.selectionMode = 'none';
+        this.showList(!this.isOpen);
+    }
+
+    /** @hidden */
     moreClicked(): void {
         this.open();
         this._suggestions = this.selected;
