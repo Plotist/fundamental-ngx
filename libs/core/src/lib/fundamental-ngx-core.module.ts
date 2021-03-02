@@ -85,6 +85,7 @@ import { SliderModule } from './slider/public_api';
 import { OnlyDigitsModule } from './utils/directives/only-digits/only-digits.module';
 import { IllustratedMessageModule } from './illustrated-message/illustrated-message.module';
 import { StatusIndicatorModule } from './status-indicator/status-indicator.module';
+import { DynamicPageModule } from './dynamic-page/dynamic-page.module';
 
 @NgModule({
     imports: [CommonModule, FormsModule],
@@ -107,6 +108,7 @@ import { StatusIndicatorModule } from './status-indicator/status-indicator.modul
         DatePickerModule,
         DatetimePickerModule,
         DragAndDropModule,
+        DynamicPageModule,
         DynamicSideContentModule,
         FeedListItemModule,
         FeedInputModule,
