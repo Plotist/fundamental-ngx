@@ -15,7 +15,7 @@ export type LablePosition = 'left' | 'right' | 'top' | 'bottom';
 export type FillingType = 'radial' | 'angled' | 'linearup' | 'lineardown' | 'linearleft';
 export type FillingDirection = 'clock' | 'anticlock';
 
-export interface Points {
+export interface Point {
     x: number;
     y: number;
 }
@@ -179,7 +179,7 @@ export class StatusIndicatorComponent implements OnChanges, AfterViewInit {
 
     /** @hidden */
     private _angleCalculation(): void {
-        let sPointsAttributeValue: Array<Points>;
+        let sPointsAttributeValue: Array<Point>;
         let polygonPoints: string;
         switch (this.fillingType) {
             case 'angled':
@@ -256,19 +256,19 @@ export class StatusIndicatorComponent implements OnChanges, AfterViewInit {
     }
 
     /** @hidden */
-    private _createPoint(iX, iY): Points {
+    private _createPoint(iX, iY): Point {
         return { x: iX, y: iY };
     }
 
     /** @hidden */
-    private _getPolygonPointsForCircularFilling(iValue, _oBoundingBoxSvg): Array<Points> {
+    private _getPolygonPointsForCircularFilling(iValue, _oBoundingBoxSvg): Array<Point> {
         const that = this;
         const iAngle = 3.6 * iValue;
         const oBox = _oBoundingBoxSvg;
         const aPoints = [];
         let iXDifferenceFromBoundaryCentre: number;
         let iYDifferenceFromBoundaryCentre: number;
-        let oPolygonPoint: Points;
+        let oPolygonPoint: Point;
 
         // starts at 12, the algorithm computes the coordination for clockwise direction only
         // counter clockwise direction is managed by symmetry
@@ -276,7 +276,7 @@ export class StatusIndicatorComponent implements OnChanges, AfterViewInit {
         const oCentrePoint = this._createPoint(oBox.x + oBox.width / 2, oBox.y + oBox.height / 2);
 
         // Reflects x coordinate by centre point for Counter Clockwise type
-        function _adjustIfCounterClockwise(oPoint: Points): Points {
+        function _adjustIfCounterClockwise(oPoint: Point): Point {
             const oResult = Object.assign({}, oPoint);
 
             if (that._fillDirection === 'anticlock') {
