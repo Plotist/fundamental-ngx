@@ -17,8 +17,7 @@ import {
 } from '@angular/core';
 
 import { Observable, of, fromEvent, Subscription } from 'rxjs';
-import { delay, tap, debounceTime, takeWhile, distinctUntilChanged, switchMap, filter } from 'rxjs/operators';
-
+import { delay, debounceTime, takeWhile, distinctUntilChanged, filter } from 'rxjs/operators';
 import { ToolbarItemDirective } from './public_api';
 import { applyCssClass, ContentDensityService, CssClassBuilder } from '../utils/public_api';
 import { OVERFLOW_PRIORITY_SCORE } from '../utils/consts';
@@ -91,6 +90,10 @@ export class ToolbarComponent implements OnInit, AfterViewInit, OnDestroy, After
     @Input()
     clearBorder = false;
 
+    /** Whether all items should be inside overflow */
+    @Input()
+    forceOverflow = false;
+
     /** @hidden */
     @ViewChild('toolbar')
     toolbar: ElementRef;
@@ -120,7 +123,7 @@ export class ToolbarComponent implements OnInit, AfterViewInit, OnDestroy, After
 
     /** @hidden */
     private get _overflowBody(): HTMLElement {
-        return this.overflowBody.nativeElement as HTMLElement;
+        return this.overflowBody && this.overflowBody.nativeElement as HTMLElement;
     }
 
     /** @hidden */
@@ -147,6 +150,8 @@ export class ToolbarComponent implements OnInit, AfterViewInit, OnDestroy, After
     private _alive = true;
 
     /** @hidden */
+    private _initialised = false;
+
     constructor(
         private _cd: ChangeDetectorRef,
         private _renderer: Renderer2,
@@ -165,7 +170,7 @@ export class ToolbarComponent implements OnInit, AfterViewInit, OnDestroy, After
         fromEvent(window, 'resize')
             .pipe(
                 takeWhile(() => this._alive && this.shouldOverflow),
-                debounceTime(25),
+                debounceTime(50),
                 distinctUntilChanged()
             )
             .subscribe((_) => this._onResize());
@@ -181,7 +186,7 @@ export class ToolbarComponent implements OnInit, AfterViewInit, OnDestroy, After
                 )
                 .subscribe(() => this._collapseItems());
         }
-
+        this._initialised = true;
         this._listenForItemChanges();
         this.buildComponentCssClass();
     }
@@ -195,6 +200,11 @@ export class ToolbarComponent implements OnInit, AfterViewInit, OnDestroy, After
     ngOnDestroy(): void {
         this._subscriptions.unsubscribe();
         this._alive = false;
+    }
+
+    /** Change detection reference */
+    detectChanges(): void {
+        this._cd.detectChanges();
     }
 
     /** @hidden */
@@ -217,13 +227,18 @@ export class ToolbarComponent implements OnInit, AfterViewInit, OnDestroy, After
 
     /** Method triggering collapsible toolbar  */
     updateCollapsibleItems(): void {
-        this._onResize();
+        if (this._initialised) {
+            this._onResize();
+        }
     }
 
     /** @hidden */
     private _onResize(): void {
         this._reset();
-        this._collapseItems();
+        if (this.shouldOverflow) {
+            this._collapseItems();
+        }
+        this._cd.detectChanges();
     }
 
     // shouldOverflow items
@@ -238,9 +253,8 @@ export class ToolbarComponent implements OnInit, AfterViewInit, OnDestroy, After
             const itemGroup = this._getElementGroup(toolbarItem);
             const itemPriority = this._getElementPriority(toolbarItem);
             const shouldItemBeRemovedByWidth = this._shouldToolbarItemBeRemovedByWidth(itemWidth, _contentWidth);
-            const shouldAlwaysBeInOverflow = itemPriority === OverflowPriorityEnum.ALWAYS;
+            const shouldAlwaysBeInOverflow = ((itemPriority === OverflowPriorityEnum.ALWAYS) || this.forceOverflow);
             const shouldNeverBeInOverflow = itemPriority === OverflowPriorityEnum.NEVER;
-
             if ((shouldItemBeRemovedByWidth && !shouldNeverBeInOverflow) || shouldAlwaysBeInOverflow) {
                 if (itemGroup) {
                     this._hideElementsFromCurrentGroup(itemGroup);
@@ -472,7 +486,11 @@ export class ToolbarComponent implements OnInit, AfterViewInit, OnDestroy, After
 
     /** @hidden */
     private _addToolbarItemToOverflow(toolbarItems: ToolbarItemDirective[]): void {
-        toolbarItems.forEach((x) => this._overflowBody.appendChild(x.elementRef.nativeElement));
+        toolbarItems.forEach((x) => {
+            if (this._overflowBody) {
+                this._overflowBody.appendChild(x.elementRef.nativeElement)
+            }
+        });
     }
 
     /** @hidden */
@@ -480,9 +498,11 @@ export class ToolbarComponent implements OnInit, AfterViewInit, OnDestroy, After
         this._normalElements.forEach(this._removeToolbarItemFromDOM.bind(this));
         this._overflowElements.forEach(this._removeToolbarItemFromDOM.bind(this));
 
-        this.toolbarItems.map((x) => {
-            this._renderer.insertBefore(this._toolbar, x.elementRef.nativeElement, this.overflowSpacer.nativeElement);
-        });
+        if (this.overflowSpacer) {
+            this.toolbarItems.map((x) => {
+                this._renderer.insertBefore(this._toolbar, x.elementRef.nativeElement, this.overflowSpacer.nativeElement);
+            });
+        }
 
         this._overflowElements = [];
         this._normalElements = [];

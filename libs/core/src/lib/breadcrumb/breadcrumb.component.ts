@@ -1,6 +1,7 @@
 import {
     AfterContentInit,
-    ChangeDetectionStrategy, ChangeDetectorRef,
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
     Component,
     ContentChildren,
     ElementRef,
@@ -18,7 +19,7 @@ import { RtlService } from '../utils/services/rtl.service';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { KeyUtil } from '../utils/functions';
 import { MenuComponent } from '../menu/menu.component';
-import { Placement } from 'popper.js';
+import { Placement } from '../popover/popover-position/popover-position';
 import { ENTER, SPACE } from '@angular/cdk/keycodes';
 import { ContentDensityService } from '../utils/public_api';
 
@@ -101,6 +102,7 @@ export class BreadcrumbComponent implements AfterContentInit, OnInit, OnDestroy 
             this.expandBreadcrumbs();
         }
         this.previousContainerWidth = this.containerBoundary;
+        this._cdRef.detectChanges();
     }
 
     /** @hidden */
