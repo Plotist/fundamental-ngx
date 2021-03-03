@@ -8,7 +8,9 @@ import {
     EventEmitter,
     Input,
     OnChanges,
-    OnDestroy, OnInit, Optional,
+    OnDestroy,
+    OnInit,
+    Optional,
     Output,
     SimpleChanges,
     TemplateRef,
@@ -53,7 +55,6 @@ import { ContentDensityService } from '../utils/public_api';
     encapsulation: ViewEncapsulation.None
 })
 export class SplitButtonComponent implements AfterContentInit, OnChanges, OnDestroy, OnInit {
-
     /** Whether to apply compact mode to the button. */
     @Input()
     compact: boolean = null;
@@ -123,7 +124,11 @@ export class SplitButtonComponent implements AfterContentInit, OnChanges, OnDest
     private _contentDensitySubscription = new Subscription();
 
     /** @hidden */
-    constructor(private _cdRef: ChangeDetectorRef, private _elRef: ElementRef, @Optional() private _contentDensityService: ContentDensityService) {}
+    constructor(
+        private _cdRef: ChangeDetectorRef,
+        private _elRef: ElementRef,
+        @Optional() private _contentDensityService: ContentDensityService
+    ) {}
 
     /** @hidden Emits event when main button is clicked */
     onMainButtonClick(event: MouseEvent): void {
@@ -139,10 +144,12 @@ export class SplitButtonComponent implements AfterContentInit, OnChanges, OnDest
     /** @hidden */
     ngOnInit(): void {
         if (this.compact === null && this._contentDensityService) {
-            this._contentDensitySubscription.add(this._contentDensityService.contentDensity.subscribe(density => {
-                this.compact = density === 'compact';
-                this._cdRef.detectChanges();
-            }))
+            this._contentDensitySubscription.add(
+                this._contentDensityService.contentDensity.subscribe((density) => {
+                    this.compact = density === 'compact';
+                    this._cdRef.detectChanges();
+                })
+            );
         }
     }
 
@@ -191,7 +198,7 @@ export class SplitButtonComponent implements AfterContentInit, OnChanges, OnDest
 
     /** @hidden */
     private _setupMenuItemSubscriptions(): void {
-        this.menu.menuItems.forEach(menuItem => {
+        this.menu.menuItems.forEach((menuItem) => {
             menuItem.onSelect.pipe(first()).subscribe(() => {
                 if (this.fixedWidth) {
                     this._getMainButtonWidth();

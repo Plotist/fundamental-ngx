@@ -3,8 +3,10 @@ import {
     Component,
     ElementRef,
     Input,
-    OnChanges, OnDestroy,
-    OnInit, Optional,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    Optional,
     ViewEncapsulation
 } from '@angular/core';
 import { FormStates } from './form-states';

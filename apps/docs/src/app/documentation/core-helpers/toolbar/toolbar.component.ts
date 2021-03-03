@@ -3,7 +3,8 @@ import { environment } from '../../../../environments/environment';
 import { Router } from '@angular/router';
 import { Libraries } from '../../utilities/libraries';
 import {
-    ContentDensity, ContentDensityService,
+    ContentDensity,
+    ContentDensityService,
     MenuComponent,
     MenuKeyboardService,
     ShellbarMenuItem,

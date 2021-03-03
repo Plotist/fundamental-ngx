@@ -8,7 +8,10 @@ import {
     ChangeDetectionStrategy,
     OnChanges,
     ViewEncapsulation,
-    AfterViewInit, OnInit, OnDestroy, Optional
+    AfterViewInit,
+    OnInit,
+    OnDestroy,
+    Optional
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { applyCssClass, ContentDensityService, CssClassBuilder } from '../../utils/public_api';
@@ -30,7 +33,8 @@ let uniqueId = 0;
         }
     ]
 })
-export class RadioButtonComponent implements OnChanges, AfterViewInit, CssClassBuilder, ControlValueAccessor, OnInit, OnDestroy {
+export class RadioButtonComponent
+    implements OnChanges, AfterViewInit, CssClassBuilder, ControlValueAccessor, OnInit, OnDestroy {
     /** @hidden */
     @ViewChild('inputElement')
     inputElement: ElementRef;
@@ -123,15 +127,20 @@ export class RadioButtonComponent implements OnChanges, AfterViewInit, CssClassB
     private _subscriptions = new Subscription();
 
     /** @hidden */
-    constructor(private changeDetectionRef: ChangeDetectorRef, @Optional() private _contentDensityService: ContentDensityService) {}
+    constructor(
+        private changeDetectionRef: ChangeDetectorRef,
+        @Optional() private _contentDensityService: ContentDensityService
+    ) {}
 
     /** @hidden */
     ngOnInit(): void {
         if (this.compact === null && this._contentDensityService) {
-            this._subscriptions.add(this._contentDensityService.contentDensity.subscribe(density => {
-                this.compact = density === 'compact';
-                this.buildComponentCssClass();
-            }));
+            this._subscriptions.add(
+                this._contentDensityService.contentDensity.subscribe((density) => {
+                    this.compact = density === 'compact';
+                    this.buildComponentCssClass();
+                })
+            );
         }
     }
 

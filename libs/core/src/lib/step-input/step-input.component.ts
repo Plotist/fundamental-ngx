@@ -501,7 +501,7 @@ export class StepInputComponent implements OnInit, AfterViewInit, OnDestroy, Con
     /** @hidden */
     private _getNumberFormat(): NumberFormat {
         if (isDevMode() && this.minFractionDigits > this.maxFractionDigits) {
-            throw new Error("Range error - minFractionDigits can't be bigger than maxFractionDigits");
+            throw new Error('Range error - minFractionDigits can\'t be bigger than maxFractionDigits');
         }
 
         return new NumberFormat(this.locale, {

@@ -7,7 +7,9 @@ import {
     forwardRef,
     HostBinding,
     Inject,
-    Input, OnInit,
+    Input,
+    OnDestroy,
+    OnInit,
     Optional,
     ViewChild,
     ViewEncapsulation
@@ -19,8 +21,7 @@ import { Platform } from '@angular/cdk/platform';
 import { LIST_ITEM_COMPONENT, ListItemInterface } from '../../list/list-item/list-item-utils';
 import { SPACE } from '@angular/cdk/keycodes';
 import { ContentDensityService } from '../../utils/public_api';
-import { map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 let checkboxUniqueId = 0;
 
@@ -40,7 +41,7 @@ export type fdCheckboxTypes = 'checked' | 'unchecked' | 'indeterminate' | 'force
         }
     ]
 })
-export class CheckboxComponent implements ControlValueAccessor, OnInit {
+export class CheckboxComponent implements ControlValueAccessor, OnInit, OnDestroy {
     /** @hidden */
     @ViewChild('inputLabel')
     inputLabel: ElementRef;
@@ -89,9 +90,6 @@ export class CheckboxComponent implements ControlValueAccessor, OnInit {
     @Input()
     compact: boolean = null;
 
-    /** @hidden Observable to use if compact input not provided */
-    compact$: Observable<boolean>;
-
     /** Enables controls third state. */
     @Input()
     tristate: boolean;
@@ -103,6 +101,9 @@ export class CheckboxComponent implements ControlValueAccessor, OnInit {
     /** Assigns given class to checkbox label element */
     @Input()
     labelClass: string;
+
+    /** @hidden */
+    private _subscriptions = new Subscription();
 
     /** Sets values returned by control. */
     @Input('values')
@@ -145,10 +146,16 @@ export class CheckboxComponent implements ControlValueAccessor, OnInit {
     /** @hidden */
     ngOnInit(): void {
         if (this.compact === null && this._contentDensityService) {
-            this.compact$ = this._contentDensityService.contentDensity.pipe(
-                map(density => density === 'compact')
-            );
+            this._subscriptions.add(this._contentDensityService.contentDensity.subscribe(density => {
+                this.compact = density === 'compact';
+                this._changeDetectorRef.detectChanges();
+            }));
         }
+    }
+
+    /** @hidden */
+    ngOnDestroy(): void {
+        this._subscriptions.unsubscribe();
     }
 
     /** @hidden Used to define if control is in 'indeterminate' state.*/

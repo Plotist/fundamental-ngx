@@ -5,7 +5,10 @@ import {
     ElementRef,
     EventEmitter,
     forwardRef,
-    Input, OnDestroy, OnInit, Optional,
+    Input,
+    OnDestroy,
+    OnInit,
+    Optional,
     Output,
     ViewChild,
     ViewEncapsulation
@@ -107,14 +110,19 @@ export class SwitchComponent implements ControlValueAccessor, OnInit, OnDestroy 
     /** @hidden */
     onTouched: Function = () => {};
 
-    constructor(private readonly _changeDetectorRef: ChangeDetectorRef, @Optional() private _contentDensityService: ContentDensityService) {}
+    constructor(
+        private readonly _changeDetectorRef: ChangeDetectorRef,
+        @Optional() private _contentDensityService: ContentDensityService
+    ) {}
 
     /** @hidden */
     ngOnInit(): void {
         if (this.compact === null && this._contentDensityService) {
-            this._subscriptions.add(this._contentDensityService.contentDensity.subscribe(density => {
-                this.compact = density === 'compact';
-            }))
+            this._subscriptions.add(
+                this._contentDensityService.contentDensity.subscribe((density) => {
+                    this.compact = density === 'compact';
+                })
+            );
         }
     }
 

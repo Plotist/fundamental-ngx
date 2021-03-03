@@ -13,8 +13,8 @@ const routes: Routes = [
         path: '',
         component: ContentDensityHeaderComponent,
         children: [
-            {path: '', component: ContentDensityDocsComponent},
-            {path: 'api', component: ApiComponent, data: {content: API_FILES.contentDensity}}
+            { path: '', component: ContentDensityDocsComponent },
+            { path: 'api', component: ApiComponent, data: { content: API_FILES.contentDensity } }
         ]
     }
 ];
@@ -24,5 +24,4 @@ const routes: Routes = [
     exports: [RouterModule],
     declarations: [ContentDensityDocsComponent, ContentDensityHeaderComponent, ContentDensityExampleComponent]
 })
-export class ContentDensityDocsModule {
-}
+export class ContentDensityDocsModule {}

@@ -1,9 +1,17 @@
-import { Component, HostBinding, Input, OnInit, Optional, ViewChild } from '@angular/core';
+import {
+    ChangeDetectorRef,
+    Component,
+    HostBinding,
+    Input,
+    OnDestroy,
+    OnInit,
+    Optional,
+    ViewChild
+} from '@angular/core';
 import { BaseButton, ButtonType } from '../../button/base-button';
 import { ButtonComponent } from '../../button/button.component';
-import { Observable } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { ContentDensityService } from '../../utils/public_api';
-import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'fd-button-bar',
@@ -12,7 +20,7 @@ import { map } from 'rxjs/operators';
               [type]="type"
               [glyphPosition]="glyphPosition"
               [glyph]="glyph"
-              [compact]="compact$ ? (compact$ | async) : compact"
+              [compact]="compact"
               [fdType]="fdType"
               [label]="label"
               [fdMenu]="fdMenu"
@@ -22,7 +30,7 @@ import { map } from 'rxjs/operators';
       </button>
   `
 })
-export class ButtonBarComponent extends BaseButton implements OnInit {
+export class ButtonBarComponent extends BaseButton implements OnInit, OnDestroy {
     /** Whether the element should take the whole width of the container. */
     @Input()
     @HostBinding('class.fd-bar__element--full-width')
@@ -31,9 +39,6 @@ export class ButtonBarComponent extends BaseButton implements OnInit {
     /** Whether to apply compact mode to the button. */
     @Input()
     compact: boolean = null;
-
-    /** @hidden Observable to use if compact input not provided */
-    compact$: Observable<boolean>;
 
     /** The type of the button. Types include:
      * 'standard' | 'positive' | 'negative' | 'attention' | 'half' | 'ghost' | 'transparent' | 'emphasized' | 'menu'.
@@ -50,16 +55,25 @@ export class ButtonBarComponent extends BaseButton implements OnInit {
     @ViewChild(ButtonComponent)
     _buttonComponent: ButtonComponent;
 
-    constructor(@Optional() private _contentDensityService: ContentDensityService) {
+    /** @hidden */
+    private _subscriptions = new Subscription();
+
+    constructor(@Optional() private _contentDensityService: ContentDensityService, private _cdRef: ChangeDetectorRef) {
         super();
     }
 
     /** @hidden */
     ngOnInit(): void {
         if (this.compact === null && this._contentDensityService) {
-            this.compact$ = this._contentDensityService.contentDensity.pipe(
-                map(density => density === 'compact')
-            );
+            this._subscriptions.add(this._contentDensityService.contentDensity.subscribe(density => {
+                this.compact = density === 'compact';
+                this._cdRef.detectChanges();
+            }));
         }
+    }
+
+    /** @hidden */
+    ngOnDestroy(): void {
+        this._subscriptions.unsubscribe();
     }
 }

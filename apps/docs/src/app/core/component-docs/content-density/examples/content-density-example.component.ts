@@ -1,8 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {
-    ContentDensity,
-    ContentDensityService
-} from '@fundamental-ngx/core';
+import { ContentDensity, ContentDensityService } from '@fundamental-ngx/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -20,9 +17,7 @@ export class ContentDensityExampleComponent implements OnInit {
     ngOnInit(): void {
         this.selectedDensity = this._contentDensityService.contentDensity.value;
 
-        this.compact$ = this._contentDensityService.contentDensity.pipe(
-            map(density => density === 'compact')
-        );
+        this.compact$ = this._contentDensityService.contentDensity.pipe(map((density) => density === 'compact'));
     }
 
     onChange(): void {

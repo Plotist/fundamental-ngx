@@ -5,13 +5,13 @@ import {
     ElementRef,
     Input,
     OnChanges,
-    OnInit, Optional,
+    OnInit,
+    Optional,
     ViewEncapsulation
 } from '@angular/core';
 import { applyCssClass, ContentDensityService, CssClassBuilder } from '../utils/public_api';
 import { BaseButton } from './base-button';
-import { Observable, Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 
 
 /**
@@ -41,9 +41,6 @@ export class ButtonComponent extends BaseButton implements OnChanges, CssClassBu
     /** The property allows user to pass additional css classes. */
     @Input()
     class = '';
-
-    /** @hidden Observable to use if compact input not provided */
-    compact$: Observable<boolean>;
 
     /** @hidden */
     private _subscriptions = new Subscription();
