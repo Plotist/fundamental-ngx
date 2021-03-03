@@ -121,6 +121,7 @@ export class SwitchComponent implements ControlValueAccessor, OnInit, OnDestroy 
             this._subscriptions.add(
                 this._contentDensityService.contentDensity.subscribe((density) => {
                     this.compact = density === 'compact';
+                    this._changeDetectorRef.detectChanges();
                 })
             );
         }

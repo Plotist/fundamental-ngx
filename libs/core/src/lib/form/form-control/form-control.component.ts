@@ -84,6 +84,7 @@ export class FormControlComponent implements CssClassBuilder, OnInit, OnChanges,
         if (this.compact === null && this._contentDensityService) {
             this._subscriptions.add(this._contentDensityService.contentDensity.subscribe(density => {
                 this.compact = density === 'compact';
+                this.buildComponentCssClass();
             }));
         }
     }
