@@ -77,6 +77,7 @@ export class TokenComponent implements OnInit, OnDestroy {
         if (this.compact === null) {
             this._subscriptions.add(this._contentDensityService.contentDensity.subscribe(density => {
                 this.compact = density === 'compact';
+                this._cdRef.markForCheck();
             }))
         }
     }
