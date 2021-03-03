@@ -11,7 +11,7 @@ import {
     isDevMode,
     LOCALE_ID,
     OnDestroy,
-    OnInit,
+    OnInit, Optional,
     Output,
     ViewChild,
     ViewEncapsulation
@@ -245,7 +245,7 @@ export class StepInputComponent implements OnInit, AfterViewInit, OnDestroy, Con
     constructor(
         @Inject(LOCALE_ID) locale,
         private _changeDetectorRef: ChangeDetectorRef,
-        private _contentDensityService: ContentDensityService
+        @Optional() private _contentDensityService: ContentDensityService
     ) {
         this.locale = locale;
     }
@@ -254,7 +254,7 @@ export class StepInputComponent implements OnInit, AfterViewInit, OnDestroy, Con
     ngOnInit(): void {
         this._numberFormat = this._getNumberFormat();
         this._buildRegExps();
-        if (this.compact === null) {
+        if (this.compact === null && this._contentDensityService) {
             this._subscriptions.add(this._contentDensityService.contentDensity.subscribe(density => {
                 this.compact = density === 'compact';
                 this._changeDetectorRef.detectChanges();

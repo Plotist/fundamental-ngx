@@ -4,7 +4,7 @@ import {
     Component,
     ElementRef,
     EventEmitter,
-    Input, OnDestroy, OnInit,
+    Input, OnDestroy, OnInit, Optional,
     Output,
     ViewChild,
     ViewEncapsulation
@@ -68,13 +68,13 @@ export class TokenComponent implements OnInit, OnDestroy {
     constructor(
         public elementRef: ElementRef,
         private _cdRef: ChangeDetectorRef,
-        private _contentDensityService: ContentDensityService
+        @Optional() private _contentDensityService: ContentDensityService
     ) {}
 
     /** @hidden */
     /** @hidden */
     ngOnInit(): void {
-        if (this.compact === null) {
+        if (this.compact === null && this._contentDensityService) {
             this._subscriptions.add(this._contentDensityService.contentDensity.subscribe(density => {
                 this.compact = density === 'compact';
                 this._cdRef.markForCheck();

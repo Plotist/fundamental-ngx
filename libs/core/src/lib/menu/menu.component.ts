@@ -130,7 +130,7 @@ export class MenuComponent extends BasePopoverClass implements MenuInterface, Af
                 private _menuService: MenuService,
                 private _changeDetectorRef: ChangeDetectorRef,
                 private _popoverService: PopoverService,
-                private _contentDensityService: ContentDensityService,
+                @Optional() private _contentDensityService: ContentDensityService,
                 @Optional() private _rtlService: RtlService,
                 @Optional() private _dynamicComponentService: DynamicComponentService) {
         super();
@@ -138,7 +138,7 @@ export class MenuComponent extends BasePopoverClass implements MenuInterface, Af
 
     /** @hidden */
     ngOnInit(): void {
-        if (this.compact === null) {
+        if (this.compact === null && this._contentDensityService) {
             this._subscriptions.add(
                 this._contentDensityService.contentDensity.subscribe((density) => {
                     this.compact = density === 'compact';

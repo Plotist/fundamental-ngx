@@ -10,7 +10,6 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { BreadcrumbComponent } from './breadcrumb.component';
 import { whenStable } from '../utils/tests/when-stable';
 import { BreadcrumbItemDirective, BreadcrumbLinkDirective } from './public_api';
-import { ContentDensityService } from '../utils/public_api';
 @Component({
     selector: 'fd-breadcrumb-test-component',
     template: `
@@ -44,7 +43,7 @@ describe('BreadcrumbComponent', () => {
                 BreadcrumbWrapperComponent
             ],
             imports: [PopoverModule, MenuModule, IconModule, RouterModule, RouterTestingModule],
-            providers: [RtlService, ContentDensityService]
+            providers: [RtlService]
         }).compileComponents();
     }));
 

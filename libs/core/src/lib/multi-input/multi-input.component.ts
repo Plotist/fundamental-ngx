@@ -10,7 +10,7 @@ import {
     Input,
     OnChanges,
     OnDestroy,
-    OnInit,
+    OnInit, Optional,
     Output,
     SimpleChanges,
     TemplateRef,
@@ -258,12 +258,12 @@ export class MultiInputComponent implements
         private _elementRef: ElementRef,
         private _changeDetRef: ChangeDetectorRef,
         private _dynamicComponentService: DynamicComponentService,
-        private _contentDensityService: ContentDensityService
+        @Optional() private _contentDensityService: ContentDensityService
     ) { }
 
     /** @hidden */
     ngOnInit(): void {
-        if (this.compact === null) {
+        if (this.compact === null && this._contentDensityService) {
             this._subscriptions.add(this._contentDensityService.contentDensity.subscribe(density => {
                 this.compact = density === 'compact';
                 this.buildComponentCssClass();

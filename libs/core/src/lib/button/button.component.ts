@@ -5,7 +5,7 @@ import {
     ElementRef,
     Input,
     OnChanges,
-    OnInit,
+    OnInit, Optional,
     ViewEncapsulation
 } from '@angular/core';
 import { applyCssClass, ContentDensityService, CssClassBuilder } from '../utils/public_api';
@@ -52,7 +52,7 @@ export class ButtonComponent extends BaseButton implements OnChanges, CssClassBu
     constructor(
         private _elementRef: ElementRef,
         private _changeDetectorRef: ChangeDetectorRef,
-        private _contentDensityService: ContentDensityService
+        @Optional() private _contentDensityService: ContentDensityService
     ) {
         super()
     }
@@ -66,7 +66,7 @@ export class ButtonComponent extends BaseButton implements OnChanges, CssClassBu
     }
 
     public ngOnInit(): void {
-        if (this.compact === null) {
+        if (this.compact === null && this._contentDensityService) {
             this._subscriptions.add(this._contentDensityService.contentDensity.subscribe(density => {
                 this.compact = density === 'compact';
                 this.buildComponentCssClass();

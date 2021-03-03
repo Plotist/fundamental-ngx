@@ -197,14 +197,14 @@ export class BreadcrumbComponent implements AfterContentInit, OnInit {
         if (this.rtlService) {
             this.rtlService.rtl.subscribe((value) => this.placement$.next(value ? 'bottom-end' : 'bottom-start'));
         }
-        if (this.compact === null) {
+        if (this.compact === null && this._contentDensityService) {
             this.compact$ = this._contentDensityService.contentDensity.pipe(
                 map(density => density === 'compact')
             );
         }
     }
 
-    constructor(public elementRef: ElementRef, @Optional() private rtlService: RtlService, private _contentDensityService: ContentDensityService) {}
+    constructor(public elementRef: ElementRef, @Optional() private rtlService: RtlService, @Optional() private _contentDensityService: ContentDensityService) {}
 
     private fitInBoundries(): boolean {
         return this.elementRef.nativeElement.getBoundingClientRect().width < this.getContainerBoundary();

@@ -11,7 +11,6 @@ import { InputGroupModule } from '../input-group/input-group.module';
 import { CheckboxModule } from '../checkbox/checkbox.module';
 import { ListModule } from '../list/list.module';
 import { DynamicComponentService } from '../utils/dynamic-component/dynamic-component.service';
-import { ContentDensityService } from '../utils/public_api';
 
 describe('MultiInputComponent', () => {
     let component: MultiInputComponent;
@@ -32,8 +31,7 @@ describe('MultiInputComponent', () => {
                 InputGroupModule
             ],
             providers: [
-                DynamicComponentService,
-                ContentDensityService
+                DynamicComponentService
             ]
         }).compileComponents();
     }));

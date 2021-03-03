@@ -4,7 +4,7 @@ import {
     Component,
     HostBinding,
     Input, OnDestroy,
-    OnInit,
+    OnInit, Optional,
     ViewEncapsulation
 } from '@angular/core';
 import { TableService } from './table.service';
@@ -67,12 +67,12 @@ export class TableComponent implements AfterViewInit, OnInit, OnDestroy {
 
     constructor (
         private _tableService: TableService,
-        private _contentDensityService: ContentDensityService
+        @Optional() private _contentDensityService: ContentDensityService
     ) {}
 
     /** @hidden */
     ngOnInit(): void {
-        if (this.compact === null) {
+        if (this.compact === null && this._contentDensityService) {
             this._subscriptions.add(this._contentDensityService.contentDensity.subscribe(density => {
                 this.compact = density === 'compact';
             }))

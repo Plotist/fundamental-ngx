@@ -4,7 +4,7 @@ import {
     ElementRef,
     Input,
     OnChanges, OnDestroy,
-    OnInit,
+    OnInit, Optional,
     ViewEncapsulation
 } from '@angular/core';
 import { FormStates } from './form-states';
@@ -74,12 +74,12 @@ export class FormControlComponent implements CssClassBuilder, OnInit, OnChanges,
     }
 
     /** @hidden */
-    constructor(private _elementRef: ElementRef, private _contentDensityService: ContentDensityService) {}
+    constructor(private _elementRef: ElementRef, @Optional() private _contentDensityService: ContentDensityService) {}
 
     /** @hidden */
     ngOnInit(): void {
         this.buildComponentCssClass();
-        if (this.compact === null) {
+        if (this.compact === null && this._contentDensityService) {
             this._subscriptions.add(this._contentDensityService.contentDensity.subscribe(density => {
                 this.compact = density === 'compact';
             }));

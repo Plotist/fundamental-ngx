@@ -1,14 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
 import { CalendarService } from './calendar.service';
-import { ContentDensityService } from '../utils/public_api';
 
 describe('CalendarService', () => {
     let service: CalendarService;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            providers: [CalendarService, ContentDensityService]
+            providers: [CalendarService]
         });
         service = TestBed.inject(CalendarService);
     });

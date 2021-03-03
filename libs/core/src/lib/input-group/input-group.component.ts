@@ -11,7 +11,7 @@ import {
     ChangeDetectorRef,
     ElementRef,
     OnDestroy,
-    OnInit
+    OnInit, Optional
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { fromEvent, Subject, Subscription } from 'rxjs';
@@ -142,7 +142,7 @@ export class InputGroupComponent implements ControlValueAccessor, OnInit, OnDest
     constructor (
         private readonly elementRef: ElementRef,
         private readonly changeDetectorRef: ChangeDetectorRef,
-        private _contentDensityService: ContentDensityService
+        @Optional() private _contentDensityService: ContentDensityService
     ) {}
 
     /** @hidden */
@@ -178,7 +178,7 @@ export class InputGroupComponent implements ControlValueAccessor, OnInit, OnDest
     /** @hidden */
     ngOnInit(): void {
         this._listenElementEvents();
-        if (this.compact === null) {
+        if (this.compact === null && this._contentDensityService) {
             this._subscriptions.add(this._contentDensityService.contentDensity.subscribe(density => {
                 this.compact = density === 'compact';
                 this.changeDetectorRef.detectChanges();

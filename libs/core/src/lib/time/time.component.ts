@@ -177,7 +177,7 @@ export class TimeComponent<D> implements OnInit, OnChanges, OnDestroy, AfterView
         private _timeI18nLabels: TimeI18n,
         // Use @Optional to avoid angular injection error message and throw our own which is more precise one
         @Optional() private _dateTimeAdapter: DatetimeAdapter<D>,
-        private _contentDensityService: ContentDensityService
+        @Optional() private _contentDensityService: ContentDensityService
     ) {
         if (!_dateTimeAdapter) {
             throw createMissingDateImplementationError('DateTimeAdapter');
@@ -196,7 +196,7 @@ export class TimeComponent<D> implements OnInit, OnChanges, OnDestroy, AfterView
 
         this._setUpViewGrid();
 
-        if (this.compact === null) {
+        if (this.compact === null && this._contentDensityService) {
             this._subscriptions.add(this._contentDensityService.contentDensity.subscribe(density => {
                 this.compact = density === 'compact';
                 this._changeDetectorRef.detectChanges();

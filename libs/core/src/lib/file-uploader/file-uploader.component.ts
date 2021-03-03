@@ -6,7 +6,7 @@ import {
     EventEmitter,
     forwardRef,
     HostBinding,
-    Input, OnDestroy, OnInit,
+    Input, OnDestroy, OnInit, Optional,
     Output,
     ViewChild,
     ViewEncapsulation
@@ -145,12 +145,12 @@ export class FileUploaderComponent implements ControlValueAccessor, OnInit, OnDe
     constructor(
         private _fileUploadService: FileUploaderService,
         private _changeDetRef: ChangeDetectorRef,
-        private _contentDensityService: ContentDensityService
+        @Optional() private _contentDensityService: ContentDensityService
     ) {}
 
     /** @hidden */
     ngOnInit(): void {
-        if (this.compact === null) {
+        if (this.compact === null && this._contentDensityService) {
             this._subscriptions.add(this._contentDensityService.contentDensity.subscribe(density => {
                 this.compact = density === 'compact';
                 this._changeDetRef.detectChanges();

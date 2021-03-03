@@ -260,7 +260,7 @@ export class CalendarComponent<D> implements OnInit, ControlValueAccessor, Valid
     /** @hidden */
     constructor(
         private _changeDetectorRef: ChangeDetectorRef,
-        private _contentDensityService: ContentDensityService,
+        @Optional() private _contentDensityService: ContentDensityService,
         // Use @Optional to avoid angular injection error message and throw our own which is more precise one
         @Optional() private _dateTimeAdapter: DatetimeAdapter<D>,
         @Optional() @Inject(DATE_TIME_FORMATS) private _dateTimeFormats: DateTimeFormats
@@ -279,7 +279,7 @@ export class CalendarComponent<D> implements OnInit, ControlValueAccessor, Valid
     /** @hidden */
     ngOnInit(): void {
         this._prepareDisplayedView();
-        if (this.compact === null) {
+        if (this.compact === null && this._contentDensityService) {
             this._subscriptions.add(this._contentDensityService.contentDensity.subscribe(density => {
                 this.compact = density === 'compact';
             }));

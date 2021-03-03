@@ -12,7 +12,7 @@ import {
     Input,
     OnChanges,
     OnDestroy,
-    OnInit,
+    OnInit, Optional,
     Output,
     QueryList,
     SimpleChanges,
@@ -341,13 +341,13 @@ export class ComboboxComponent implements ComboboxInterface, ControlValueAccesso
         private _elementRef: ElementRef,
         private _cdRef: ChangeDetectorRef,
         private _dynamicComponentService: DynamicComponentService,
-        private _contentDensityService: ContentDensityService
+        @Optional() private _contentDensityService: ContentDensityService
     ) {}
 
     /** @hidden */
     ngOnInit(): void {
         this._refreshDisplayedValues();
-        if (this.compact === null) {
+        if (this.compact === null && this._contentDensityService) {
             this._subscriptions.add(this._contentDensityService.contentDensity.subscribe(density => {
                 this.compact = density === 'compact';
                 this._cdRef.detectChanges();

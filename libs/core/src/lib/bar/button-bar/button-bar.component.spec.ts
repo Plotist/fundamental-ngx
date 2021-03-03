@@ -2,7 +2,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ButtonBarComponent } from './button-bar.component';
 import { ButtonModule } from '../../button/button.module';
-import { ContentDensityService } from '../../utils/public_api';
 
 describe('ButtonBarComponent', () => {
     let component: ButtonBarComponent;
@@ -11,8 +10,7 @@ describe('ButtonBarComponent', () => {
     beforeEach(async () => {
         await TestBed.configureTestingModule({
             imports: [ButtonModule],
-            declarations: [ButtonBarComponent],
-            providers: [ContentDensityService]
+            declarations: [ButtonBarComponent]
         })
             .compileComponents();
     });

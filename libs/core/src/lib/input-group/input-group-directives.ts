@@ -5,7 +5,7 @@ import {
     HostBinding,
     Input,
     OnChanges, OnDestroy,
-    OnInit,
+    OnInit, Optional,
     Renderer2
 } from '@angular/core';
 import { InputGroupPlacement } from './input-group.component';
@@ -29,11 +29,11 @@ export class InputGroupInputDirective implements CssClassBuilder, OnInit, OnChan
     private _subscriptions = new Subscription();
 
     /** @hidden */
-    constructor(private _elementRef: ElementRef, private _contentDensityService: ContentDensityService) {}
+    constructor(private _elementRef: ElementRef, @Optional() private _contentDensityService: ContentDensityService) {}
 
     /** @hidden */
     ngOnInit(): void {
-        if (this.compact === null) {
+        if (this.compact === null && this._contentDensityService) {
             this._subscriptions.add(this._contentDensityService.contentDensity.subscribe(density => {
                 this.compact = density === 'compact';
                 this.buildComponentCssClass();
@@ -118,11 +118,11 @@ export class InputGroupAddOnDirective implements OnInit, OnChanges, CssClassBuil
     private _subscriptions = new Subscription();
 
     /** @hidden */
-    constructor(private _elementRef: ElementRef, private renderer: Renderer2, private _contentDensityService: ContentDensityService) {}
+    constructor(private _elementRef: ElementRef, private renderer: Renderer2, @Optional() private _contentDensityService: ContentDensityService) {}
 
     /** @hidden */
     ngOnInit(): void {
-        if (this.compact === null) {
+        if (this.compact === null && this._contentDensityService) {
             this._subscriptions.add(this._contentDensityService.contentDensity.subscribe(density => {
                 this.compact = density === 'compact';
                 this.buildComponentCssClass();

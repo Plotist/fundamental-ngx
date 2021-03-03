@@ -11,7 +11,6 @@ import { FdDate, FdDatetimeModule } from '../datetime';
 import { ButtonModule } from '../button/button.module';
 import { InputGroupModule } from '../input-group/input-group.module';
 import { DateTimeFormats, DATE_TIME_FORMATS } from '../datetime/datetime-formats';
-import { ContentDensityService } from '../utils/public_api';
 
 describe('DatetimePickerComponent', () => {
     let component: DatetimePickerComponent<FdDate>;
@@ -32,8 +31,7 @@ describe('DatetimePickerComponent', () => {
                     TimeModule,
                     InputGroupModule,
                     ButtonModule
-                ],
-                providers: [ContentDensityService]
+                ]
             }).compileComponents();
         })
     );

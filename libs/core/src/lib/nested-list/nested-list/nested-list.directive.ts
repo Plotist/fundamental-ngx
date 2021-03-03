@@ -59,7 +59,7 @@ export class NestedListDirective implements AfterContentInit, NestedListInterfac
         private _nestedListKeyboardService: NestedListKeyboardService,
         private _elementRef: ElementRef,
         private _changeDetectionRef: ChangeDetectorRef,
-        private _contentDensityService: ContentDensityService
+        @Optional() private _contentDensityService: ContentDensityService
     ) {
         if (this._nestedItemService) {
             this._nestedItemService.list = this;
@@ -68,7 +68,7 @@ export class NestedListDirective implements AfterContentInit, NestedListInterfac
 
     /** @hidden */
     ngOnInit(): void {
-        if (this.compact === null) {
+        if (this.compact === null && this._contentDensityService) {
             this._subscriptions.add(this._contentDensityService.contentDensity.subscribe(density => {
                 this.compact = density === 'compact';
             }));

@@ -8,7 +8,7 @@ import {
     ElementRef,
     EventEmitter,
     Input,
-    OnDestroy, OnInit,
+    OnDestroy, OnInit, Optional,
     Output,
     QueryList,
     ViewChild,
@@ -146,12 +146,12 @@ export class TabListComponent implements AfterContentInit, AfterViewInit, OnDest
     constructor(
         private _tabsService: TabsService,
         private _changeDetectorRef: ChangeDetectorRef,
-        private _contentDensityService: ContentDensityService
+        @Optional() private _contentDensityService: ContentDensityService
     ) {}
 
     /** @hidden */
     ngOnInit(): void {
-        if (this.compact === null) {
+        if (this.compact === null && this._contentDensityService) {
             this._subscriptions.add(this._contentDensityService.contentDensity.subscribe(density => {
                 this.compact = density === 'compact';
                 this._changeDetectorRef.detectChanges();

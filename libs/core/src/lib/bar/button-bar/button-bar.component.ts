@@ -1,4 +1,4 @@
-import { Component, HostBinding, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, HostBinding, Input, OnInit, Optional, ViewChild } from '@angular/core';
 import { BaseButton, ButtonType } from '../../button/base-button';
 import { ButtonComponent } from '../../button/button.component';
 import { Observable } from 'rxjs';
@@ -50,13 +50,13 @@ export class ButtonBarComponent extends BaseButton implements OnInit {
     @ViewChild(ButtonComponent)
     _buttonComponent: ButtonComponent;
 
-    constructor(private _contentDensityService: ContentDensityService) {
+    constructor(@Optional() private _contentDensityService: ContentDensityService) {
         super();
     }
 
     /** @hidden */
     ngOnInit(): void {
-        if (this.compact === null) {
+        if (this.compact === null && this._contentDensityService) {
             this.compact$ = this._contentDensityService.contentDensity.pipe(
                 map(density => density === 'compact')
             );

@@ -6,7 +6,7 @@ import {
     ViewEncapsulation,
     ChangeDetectionStrategy,
     Input,
-    HostBinding, OnDestroy
+    HostBinding, OnDestroy, Optional
 } from '@angular/core';
 
 import { applyCssClass, ContentDensityService, CssClassBuilder } from '../utils/public_api';
@@ -62,7 +62,7 @@ export class CardComponent implements OnChanges, OnInit, CssClassBuilder, OnDest
     private _subscriptions = new Subscription();
 
     /** @hidden */
-    constructor(private _elementRef: ElementRef<HTMLElement>, private _contentDensityService: ContentDensityService) {}
+    constructor(private _elementRef: ElementRef<HTMLElement>, @Optional() private _contentDensityService: ContentDensityService) {}
 
     /** @hidden */
     ngOnChanges(): void {
@@ -72,7 +72,7 @@ export class CardComponent implements OnChanges, OnInit, CssClassBuilder, OnDest
     /** @hidden */
     ngOnInit(): void {
         this.buildComponentCssClass();
-        if (this.compact === null) {
+        if (this.compact === null && this._contentDensityService) {
             this._subscriptions.add(this._contentDensityService.contentDensity.subscribe(density => {
                 this.compact = density === 'compact';
                 this.buildComponentCssClass();

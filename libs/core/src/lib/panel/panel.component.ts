@@ -86,12 +86,12 @@ export class PanelComponent implements CssClassBuilder, OnChanges, OnInit, OnDes
     /** @hidden */
     constructor(private _cdRef: ChangeDetectorRef,
                 private _elementRef: ElementRef,
-                private _contentDensityService: ContentDensityService,
+                @Optional() private _contentDensityService: ContentDensityService,
                 @Optional() private _rtlService: RtlService) {}
 
     /** @hidden */
     ngOnInit(): void {
-        if (this.compact === null) {
+        if (this.compact === null && this._contentDensityService) {
             this._subscription.add(this._contentDensityService.contentDensity.subscribe(density => {
                 this.compact = density === 'compact';
                 this.buildComponentCssClass();

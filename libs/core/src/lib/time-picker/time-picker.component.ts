@@ -262,7 +262,7 @@ export class TimePickerComponent<D> implements ControlValueAccessor, OnInit, Aft
         @Optional() private _dateTimeAdapter: DatetimeAdapter<D>,
         @Optional() @Inject(DATE_TIME_FORMATS) private _dateTimeFormats: DateTimeFormats,
         private _popoverFormMessage: PopoverFormMessageService,
-        private _contentDensityService: ContentDensityService
+        @Optional() private _contentDensityService: ContentDensityService
     ) {
         if (!this._dateTimeAdapter) {
             throw createMissingDateImplementationError('DateTimeAdapter');
@@ -280,7 +280,7 @@ export class TimePickerComponent<D> implements ControlValueAccessor, OnInit, Aft
 
         this._calculateTimeOptions();
 
-        if (this.compact === null) {
+        if (this.compact === null && this._contentDensityService) {
             this._subscriptions.add(this._contentDensityService.contentDensity.subscribe(density => {
                 this.compact = density === 'compact';
                 this._changeDetectorRef.detectChanges();

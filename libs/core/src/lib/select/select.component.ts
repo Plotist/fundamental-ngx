@@ -378,7 +378,7 @@ export class SelectComponent implements
         @Optional() private _dynamicComponentService: DynamicComponentService,
         @Optional() @Self() private ngControl: NgControl,
         @Optional() private _injector: Injector,
-        private _contentDensityService: ContentDensityService
+        @Optional() private _contentDensityService: ContentDensityService
 
     ) {
         if (this.ngControl) {
@@ -394,7 +394,7 @@ export class SelectComponent implements
 
         this._initializeCommonBehavior();
 
-        if (this.compact === null) {
+        if (this.compact === null && this._contentDensityService) {
             this._subscriptions.add(this._contentDensityService.contentDensity.subscribe(density => {
                 this.compact = density === 'compact';
                 this._changeDetectorRef.detectChanges();

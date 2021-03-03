@@ -339,7 +339,7 @@ export class DatetimePickerComponent<D> implements OnInit, OnDestroy, OnChanges,
     constructor(
         private _elRef: ElementRef,
         private _changeDetRef: ChangeDetectorRef,
-        private _contentDensityService: ContentDensityService,
+        @Optional() private _contentDensityService: ContentDensityService,
         // Use @Optional to avoid angular injection error message and throw our own which is more precise one
         @Optional() private _dateTimeAdapter: DatetimeAdapter<D>,
         @Optional() @Inject(DATE_TIME_FORMATS) private _dateTimeFormats: DateTimeFormats,
@@ -381,7 +381,7 @@ export class DatetimePickerComponent<D> implements OnInit, OnDestroy, OnChanges,
             this._changeDetRef.detectChanges();
         });
 
-        if (this.compact === null) {
+        if (this.compact === null && this._contentDensityService) {
             this._subscriptions.add(this._contentDensityService.contentDensity.subscribe(density => {
                 this.compact = density === 'compact';
                 this._changeDetRef.detectChanges();

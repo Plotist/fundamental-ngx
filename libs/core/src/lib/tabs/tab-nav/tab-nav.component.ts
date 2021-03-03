@@ -9,7 +9,7 @@ import {
     QueryList,
     ViewEncapsulation,
     OnChanges,
-    OnInit
+    OnInit, Optional
 } from '@angular/core';
 import { TabLinkDirective } from '../tab-link/tab-link.directive';
 import { TabItemDirective } from '../tab-item/tab-item.directive';
@@ -69,7 +69,7 @@ export class TabNavComponent implements AfterContentInit, OnChanges, OnInit, OnD
     constructor(
         private _tabsService: TabsService,
         private _elementRef: ElementRef,
-        private _contentDensityService: ContentDensityService
+        @Optional() private _contentDensityService: ContentDensityService
     ) {}
 
     /** @hidden */
@@ -86,7 +86,7 @@ export class TabNavComponent implements AfterContentInit, OnChanges, OnInit, OnD
 
     /** @hidden */
     ngOnInit(): void {
-        if (this.compact === null) {
+        if (this.compact === null && this._contentDensityService) {
             this._subscriptions.add(this._contentDensityService.contentDensity.subscribe(density => {
                 this.compact = density === 'compact';
                 this.buildComponentCssClass();

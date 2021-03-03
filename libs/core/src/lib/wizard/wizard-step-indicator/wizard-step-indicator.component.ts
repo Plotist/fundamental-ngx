@@ -3,7 +3,7 @@ import {
     ChangeDetectorRef,
     Component,
     EventEmitter,
-    Input, OnDestroy, OnInit,
+    Input, OnDestroy, OnInit, Optional,
     Output,
     ViewChild
 } from '@angular/core';
@@ -45,11 +45,11 @@ export class WizardStepIndicatorComponent implements OnInit, OnDestroy {
     /** @hidden */
     private _subscriptions = new Subscription();
 
-    constructor(private _cdRef: ChangeDetectorRef, private _contentDensityService: ContentDensityService) {}
+    constructor(private _cdRef: ChangeDetectorRef, @Optional() private _contentDensityService: ContentDensityService) {}
 
     /** @hidden */
     ngOnInit(): void {
-        if (this.compact === null) {
+        if (this.compact === null && this._contentDensityService) {
             this._subscriptions.add(this._contentDensityService.contentDensity.subscribe(density => {
                 this.compact = density === 'compact';
                 this._cdRef.detectChanges();

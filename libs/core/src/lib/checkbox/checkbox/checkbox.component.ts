@@ -136,7 +136,7 @@ export class CheckboxComponent implements ControlValueAccessor, OnInit {
         @Attribute('tabIndexValue') public tabIndexValue: number = 0,
         private _platform: Platform,
         private _changeDetectorRef: ChangeDetectorRef,
-        private _contentDensityService: ContentDensityService,
+        @Optional() private _contentDensityService: ContentDensityService,
         @Optional() @Inject(LIST_ITEM_COMPONENT) private _listItemComponent: ListItemInterface
     ) {
         this.tabIndexValue = tabIndexValue;
@@ -144,7 +144,7 @@ export class CheckboxComponent implements ControlValueAccessor, OnInit {
 
     /** @hidden */
     ngOnInit(): void {
-        if (this.compact === null) {
+        if (this.compact === null && this._contentDensityService) {
             this.compact$ = this._contentDensityService.contentDensity.pipe(
                 map(density => density === 'compact')
             );

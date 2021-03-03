@@ -8,7 +8,7 @@ import {
     EventEmitter,
     Input,
     OnChanges,
-    OnDestroy, OnInit,
+    OnDestroy, OnInit, Optional,
     Output,
     SimpleChanges,
     TemplateRef,
@@ -123,7 +123,7 @@ export class SplitButtonComponent implements AfterContentInit, OnChanges, OnDest
     private _contentDensitySubscription = new Subscription();
 
     /** @hidden */
-    constructor(private _cdRef: ChangeDetectorRef, private _elRef: ElementRef, private _contentDensityService: ContentDensityService) {}
+    constructor(private _cdRef: ChangeDetectorRef, private _elRef: ElementRef, @Optional() private _contentDensityService: ContentDensityService) {}
 
     /** @hidden Emits event when main button is clicked */
     onMainButtonClick(event: MouseEvent): void {
@@ -138,7 +138,7 @@ export class SplitButtonComponent implements AfterContentInit, OnChanges, OnDest
 
     /** @hidden */
     ngOnInit(): void {
-        if (this.compact === null) {
+        if (this.compact === null && this._contentDensityService) {
             this._contentDensitySubscription.add(this._contentDensityService.contentDensity.subscribe(density => {
                 this.compact = density === 'compact';
                 this._cdRef.detectChanges();

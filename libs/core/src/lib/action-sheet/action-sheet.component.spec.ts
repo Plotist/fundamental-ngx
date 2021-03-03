@@ -2,7 +2,6 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ActionSheetModule } from './action-sheet.module';
 import { ButtonModule } from '../button/button.module';
-import { ContentDensityService } from '../utils/public_api';
 
 @Component({
     template: ` <div #componentElement fd-action-sheet>Action Sheet Parent Test Text</div> `
@@ -19,8 +18,7 @@ describe('Action Sheet Parent Component', () => {
     beforeEach(waitForAsync(() => {
         TestBed.configureTestingModule({
             declarations: [TestComponent],
-            imports: [ActionSheetModule, ButtonModule],
-            providers: [ContentDensityService]
+            imports: [ActionSheetModule, ButtonModule]
         }).compileComponents();
     }));
 

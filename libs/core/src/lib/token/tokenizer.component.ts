@@ -191,7 +191,7 @@ export class TokenizerComponent implements AfterViewChecked, AfterViewInit, Afte
 
     /** @hidden */
     ngOnInit(): void {
-        if (this.compact === null) {
+        if (this.compact === null && this._contentDensityService) {
             this._contentDensitySubscription.add(this._contentDensityService.contentDensity.subscribe(density => {
                 this.compact = density === 'compact';
                 this._cdRef.detectChanges();
@@ -207,7 +207,7 @@ export class TokenizerComponent implements AfterViewChecked, AfterViewInit, Afte
     }
 
     constructor(private _elementRef: ElementRef,
-        private _contentDensityService: ContentDensityService,
+        @Optional() private _contentDensityService: ContentDensityService,
         private _cdRef: ChangeDetectorRef,
         @Optional() private _rtlService: RtlService,
         private _renderer: Renderer2) {

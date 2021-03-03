@@ -9,7 +9,6 @@ import {
 } from './input-group-directives';
 import { ButtonModule } from '../button/button.module';
 import { IconModule } from '../icon/icon.module';
-import { ContentDensityService } from '../utils/public_api';
 
 describe('InputGroupComponent', () => {
     let component: InputGroupComponent;
@@ -23,8 +22,7 @@ describe('InputGroupComponent', () => {
                 InputGroupAddOnDirective,
                 InputGroupTextareaDirective,
                 InputGroupComponent
-            ],
-            providers: [ContentDensityService]
+            ]
         }).compileComponents();
     }));
 

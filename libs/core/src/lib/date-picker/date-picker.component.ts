@@ -309,7 +309,7 @@ export class DatePickerComponent<D> implements OnInit, OnDestroy, AfterViewInit,
         @Optional() private _dateTimeAdapter: DatetimeAdapter<D>,
         @Optional() @Inject(DATE_TIME_FORMATS) private _dateTimeFormats: DateTimeFormats,
         private _popoverFormMessage: PopoverFormMessageService,
-        private _contentDensityService: ContentDensityService
+        @Optional() private _contentDensityService: ContentDensityService
     ) {
         if (!this._dateTimeAdapter) {
             throw createMissingDateImplementationError('DateTimeAdapter');
@@ -325,7 +325,7 @@ export class DatePickerComponent<D> implements OnInit, OnDestroy, AfterViewInit,
             this.formatInputDate(this.selectedDate);
             this._changeDetectionRef.detectChanges();
         });
-        if (this.compact === null) {
+        if (this.compact === null && this._contentDensityService) {
             this._subscriptions.add(this._contentDensityService.contentDensity.subscribe(density => {
                 this.compact = density === 'compact';
                 this._changeDetectionRef.detectChanges();

@@ -3,7 +3,6 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { ButtonComponent } from './button.component';
-import { ContentDensityService } from '../utils/public_api';
 
 @Component({
     selector: 'fd-test-component',
@@ -18,8 +17,7 @@ describe('ButtonComponent', () => {
 
     beforeEach(waitForAsync(() => {
         TestBed.configureTestingModule({
-            declarations: [ButtonComponent, TestComponent],
-            providers: [ContentDensityService]
+            declarations: [ButtonComponent, TestComponent]
         });
     }));
 
